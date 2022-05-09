@@ -1,0 +1,96 @@
+version: "3.8"
+
+# volumes:
+#   vol-emqx-data:
+#     name: foo-emqx-data
+#   vol-emqx-etc:
+#     name: foo-emqx-etc
+#   vol-emqx-log:
+#     name: foo-emqx-log
+
+
+services:
+
+  emqx:
+    container_name: emqx
+    image: emqx/emqx:4.2.3
+    restart: always
+    ports:
+      - 18083:18083
+      - 18084:18084
+      - 1883:1883
+      - 8083:8083
+      - 8883:8883
+      - 8084:8084
+      - 8085:8081
+    links:
+        - mongo
+    extra_hosts: 
+      - "localhost:192.168.1.81"
+    # volumes:
+    #   - vol-emqx-data:/opt/emqx/data
+    #   - vol-emqx-etc:/opt/emqx/etc
+    #   - vol-emqx-log:/opt/emqx/log
+
+    environment: 
+      #listener.tcp.external.max_connections
+
+      EMQX_NAME: ProjectoLeet2021RM-gl
+      EMQX_HOST: 127.0.0.1
+
+      #default dash pass
+      EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "Naomexe"
+      EMQX_LISTENER__TCP__EXTERNAL__MAX_CONNECTIONS: 1000
+
+    #default app secret
+      EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET: "emqxsecret"
+      EMQX_ALLOW_ANONYMOUS: "false"
+      EMQX_NOMATCH: "deny"
+
+      # MONGO CONNECTION
+      EMQX_AUTH__MONGO__TYPE: single
+      EMQX_AUTH__MONGO__SERVER: "mongo:27017"
+      EMQX_AUTH__MONGO__POOL: 8
+
+      EMQX_AUTH__MONGO__LOGIN: "dev"
+      EMQX_AUTH__MONGO__PASSWORD: "devpw3"
+      EMQX_AUTH__MONGO__AUTH_SOURCE: admin
+
+      EMQX_AUTH__MONGO__DATABASE: "ioticos_god_level"
+      EMQX_AUTH__MONGO__AUTH_QUERY__COLLECTION: "emqxauthrules"
+      
+      
+      EMQX_AUTH__MONGO__SUPER_QUERY__COLLECTION: "emqxauthrules"
+      EMQX_AUTH__MONGO__SUPER_QUERY__SUPER_FIELD: "is_superuser"
+      EMQX_AUTH__MONGO__SUPER_QUERY__SELECTOR: "username=%u"
+      EMQX_AUTH__MONGO__SUPER_QUERY: "off"
+
+      EMQX_AUTH__MONGO__AUTH_QUERY__PASSWORD_HASH: plain
+      EMQX_AUTH__MONGO__AUTH_QUERY__PASSWORD_FILED: "password"
+      EMQX_AUTH__MONGO__AUTH_QUERY__SELECTOR: "username=%u"
+
+
+      ## ENABLE ACL QUERY
+      #Access controll list
+      EMQX_AUTH__MONGO__ACL_QUERY: "on"
+      EMQX_AUTH__MONGO__ACL_QUERY__COLLECTION: "emqxauthrules"
+      EMQX_AUTH__MONGO__ACL_QUERY__SELECTOR: "username=%u"
+
+      EMQX_LOADED_PLUGINS: "emqx_recon,eqmx_retainer,emqx_management,emqx_dashboard,emqx_auth_mongo"
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.4
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+
+    volumes:
+      - ./mongodata:/data/db
+
+    environment:
+      TZ: "Europe/Portugal/Lisbon"
+      MONGO_INITDB_ROOT_USERNAME: "dev"
+      MONGO_INITDB_ROOT_PASSWORD: "devpw3"
+    
+    
