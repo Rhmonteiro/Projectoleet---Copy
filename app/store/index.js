@@ -13,7 +13,7 @@ export const state = () => ({
     categories:[],
     filteredCarParts:[],
     filteredVehicles:[],
-    filterCarpats: {
+    filterCarparts: {
         search:'',
     },
     rFiltros:{},
@@ -103,7 +103,7 @@ export const actions = {
             })
     },
     //GET MAKER MODELS
-    getMakerModels({commit,dispatch}, maker){
+ async   getMakerModels({commit,dispatch}, maker){
         const axiosHeader= {
             params:{name:maker},
             headers: {
@@ -111,7 +111,7 @@ export const actions = {
             }
         }
 
-        this.$axios.get("/makermodels",axiosHeader)
+      await  this.$axios.get("/makermodels",axiosHeader)
         .then(res => {
             console.log(res.data.data);
             this.commit('setMakerModels', res.data.data);
@@ -132,14 +132,14 @@ export const actions = {
             })
     },
         //GET vehicles
-    getVehicles(){
+async    getVehicles(){
             const axiosHeader= {
                 headers: {
                     token : this.state.auth.token
                 }
             }
 
-            this.$axios.get("/vehicle",axiosHeader)
+      await      this.$axios.get("/vehicle",axiosHeader)
             .then(res => {
                 console.log(res.data.data);
                 this.commit('setVehicles', res.data.data);
@@ -173,7 +173,7 @@ export const actions = {
     },
 
     //GET CAR PARTS
-    getCarParts({commit},filterBy){
+    async getCarParts({commit},filterBy){
 
         let filterByName = filterBy.category;
         let filterByBrand = filterBy.brand;
@@ -187,7 +187,7 @@ export const actions = {
                 }
             }
 
-            this.$axios.get("/carpart",axiosHeader)
+            await this.$axios.get("/carpart",axiosHeader)
             .then(res => {
                 console.log(res.data.data);
                 this.commit('setCarParts', res.data.data);
@@ -203,7 +203,7 @@ export const actions = {
                 }
             }
 
-            this.$axios.get("/carpart",axiosHeader)
+            await this.$axios.get("/carpart",axiosHeader)
             .then(res => {
                 console.log(res.data.data);
                 this.commit('setCarParts', res.data.data);
@@ -213,14 +213,14 @@ export const actions = {
             }
         },
     //GET CATEGORIES
-        getCategories(){
+ async       getCategories(){
             const axiosHeader= {
                 headers: {
                     token : this.state.auth.token,
                     
                 }
             }
-                this.$axios.get("/category",axiosHeader)
+               await this.$axios.get("/category",axiosHeader)
             .then(res => {
                 console.log(res.data.data);
                 this.commit('setCategories', res.data.data);
@@ -228,14 +228,14 @@ export const actions = {
             
     },
     //GET MAKERS
-    getCarMakers(){
+async    getCarMakers(){
         const axiosHeader= {
             headers: {
                 token : this.state.auth.token,
                 
             }
         }
-            this.$axios.get("/carmakers",axiosHeader)
+         await   this.$axios.get("/carmakers",axiosHeader)
         .then(res => {
             console.log(res.data.data);
             this.commit('setCarMakers', res.data.data);

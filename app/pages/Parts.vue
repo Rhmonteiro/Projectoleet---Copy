@@ -11,7 +11,7 @@
             <div class="row">
                  <div class="col-1">
                    <p>Categoria:</p>
-                   <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary" v-bind="newCarPart"
+                   <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary" v-bind="newCarPart"
                :title="newCarPart.type">
     <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="newCarPart.type=item.name"> {{item.name}}</a>
 </base-dropdown>
@@ -43,7 +43,7 @@
                      <base-input 
                      label="Nome" 
                      type="text" 
-                     placeholder="Ex: Fiat, Honda"
+                     placeholder="Ex: Nome da peça"
                      v-model="newCarPart.name"
                      ></base-input>
                  </div>
@@ -52,7 +52,7 @@
                      <base-input 
                      label="Descrição" 
                      type="text" 
-                     placeholder="Ex: Punto, Civic"
+                     placeholder="Ex: breve descrição"
                      v-model="newCarPart.description"
                      ></base-input>
 
@@ -62,7 +62,7 @@
                      <base-input 
                      label="Estado" 
                      type="text" 
-                     placeholder="Ex: 100000"
+                     placeholder="Ex: A+/A/B+/B..."
                      v-model="newCarPart.state"
                      ></base-input>
                 
@@ -71,7 +71,7 @@
                      <base-input 
                      label="Preço" 
                      type="text" 
-                     placeholder="Ex: yyyy/mm/dd"
+                     placeholder="Ex: 100"
                      v-model="newCarPart.price"
                      ></base-input>
 
@@ -89,7 +89,7 @@
        
        
        <!-- botao ler RFID -->
-        <div class="row pull-left">
+        <div class="row pull-right">
           <div class="col-12">
             <base-button
               @click="getRFID()"
@@ -103,14 +103,14 @@
        
        <!-- botao add -->
        
-       <div class="row pull-right">
+       <div class="row pull-left">
           <div class="col-12">
             <base-button
               @click="createNewCarPart()"
               type="primary"
               class="mb-3"
               size="lg"
-              >Add</base-button
+              >Adicionar</base-button
             >
           </div>
         </div>
@@ -130,15 +130,15 @@
 <p class="text-left">Filtrar por: <br></p> 
 <base-dropdown style="display:inline-block" min-width="32"  title-classes="btn btn-secondary"
                title="Categoria">
-    <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="resetFilteredCarPart();setFiltros('type',item.name)"> {{item.name}}</a>
+    <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="resetFilteredCarPart();setFiltros('type',item.name);defaultPagination=1"> {{item.name}}</a>
 </base-dropdown>
 <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
                title="Marca">
-    <a v-for="item, index in this.filteredCarMakers" :key="filteredCarMakers" class="dropdown-item" v-on:click="setFiltros('carMaker',item);">{{index+1}}-> {{item}}</a>
+    <a v-for="item, index in this.filteredCarMakers" :key="filteredCarMakers" class="dropdown-item" v-on:click="setFiltros('carMaker',item);filterTableModels();defaultPagination=1"> {{item}}</a>
 </base-dropdown>
 <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary"
                title="Modelo">
-    <a v-for="item,index in this.$store.state.makerModels" :key="makerModels" class="dropdown-item" v-on:click="getCategories()">{{index+1}}-> {{item}}</a>
+    <a v-for="item,index in this.tableMakerModels" :key="makerModels" class="dropdown-item" v-on:click="setFiltros('carModel',item);defaultPagination=1">{{item}}</a>
 </base-dropdown>
 
 
@@ -151,14 +151,16 @@
                 <h4 class="card-title">Peças</h4>
             </div>
         
-        <el-table :data="pagedTableData($event, sortBy)" :default-sort = "{prop: 'name', order: 'ascending'}" >
+        <el-table :data="pagedTableData" >
 
-            <el-table-column label="#" min-width="50" align="center">
-                <div slot-scope="{ row, $index}">
+            <el-table-column prop="rfid" label="RFID" min-width="50" ></el-table-column>
+            <el-table-column prop="carMaker" label="Marca" min-width="50" >
+                <!-- <div slot-scope="{ row, $index}">
                     {{$index +1 }}
-                </div>
+                </div> -->
             </el-table-column>
-            <el-table-column prop="rfid" label="RFID"></el-table-column>
+            <el-table-column prop="carModel" label="Modelo" sortable min-width="50" ></el-table-column>
+            
 
             <el-table-column prop="type" label="Categoria"></el-table-column>
 
@@ -166,11 +168,11 @@
 
             <el-table-column prop="description" label="descrição"></el-table-column>
 
-            <el-table-column prop="state" label="estado"></el-table-column>
+            <el-table-column prop="state" label="estado" min-width="40"></el-table-column>
 
-            <el-table-column prop="price" label="preço"></el-table-column>
+            <el-table-column prop="price" label="preço" min-width="40"></el-table-column>
 
-            <el-table-column label="Actions">
+            <el-table-column label="Actions" min-width="40" align="right">
 
                 <div slot-scope="{row, $index}">
                 
@@ -202,7 +204,7 @@
         
 
      </div>
-<base-pagination :page-count="Math.ceil(this.carParts.length/10)" v-model="defaultPagination">
+<base-pagination :page-count="Math.ceil(this.carParts.length/this.pageSize)" v-model="defaultPagination">
 </base-pagination>
 
     </div>
@@ -226,7 +228,7 @@ export default {
     },
     data(){
         return {
-          sortBy:"name",
+          sortBy:"type",
           pageSize:10,
           defaultPagination:1,
             itim:["1o","2o","3o"],
@@ -236,16 +238,14 @@ export default {
               model:"null"
             },
             makerModels:[],
-            carMakers:JSON.parse(JSON.stringify(this.$store.state.carMakers)).sort(
-              (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1),
+            tableMakerModels:[],
+            carMakers:[],
             filteredCarMakers:[],
             filtros:{
-              type:"Carrosaria"
             },
             filteredUniqueBrands:[],
-            categorias:JSON.parse(JSON.stringify(this.$store.state.categories)).sort(
-              (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1),
-            carParts:this.$store.state.filteredCarParts,
+            categorias:[],
+            carParts:[],
             newCarPart: {
               userId: "",
               vehicleId: "",
@@ -262,36 +262,115 @@ export default {
         }   
     },
     computed:{
-      pagedTableData(sortBy){
+      pagedTableData(){
         
-         if(sortBy){
-          let _sortBy=sortBy;
-          console.log("sort by: "+ _sortBy);
+          let _sortBy=this.sortBy;
+          if (this.carParts[0]) {
+          let checkType = typeof this.carParts[0][_sortBy];
+          console.log(checkType);
+            
+
+             switch (checkType) {
+           case 'undefined':
+             
+             break;
+          case 'number':
+             return JSON.parse(JSON.stringify(this.carParts)).sort(function(a,b) {
+          return a[_sortBy] - b[_sortBy];
+        }).slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
+
+            case'string':
+console.log("sort by: ");
+          console.log(_sortBy);
+
            return JSON.parse(JSON.stringify(this.carParts)).sort(function(a,b) {
-             return a[sortBy] - b[sortBy];
+             const sortByNormalizedA = a[_sortBy].toLowerCase();
+             const sortByNormalizedB = b[_sortBy].toLowerCase();
+             if (sortByNormalizedA < sortByNormalizedB) {
+               return -1;
+               
+             }
+             if (sortByNormalizedA > sortByNormalizedB) {
+               return 1;
+             }
+             return 0;
            }).slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
-         }
-         return this.carParts.slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
-      }
-    },
-    mounted() {
-        this.$store.dispatch('getCarParts',this.filterby);
-        this.$store.dispatch('getCategories');
-        this.$nuxt.$on(this.topic, this.processRecievedData);
-        this.$store.dispatch('getCarMakers');
-         //remove duplicados
 
+            default:
+             return JSON.parse(JSON.stringify(this.carParts));
+         }
+          }
+        
 
         
+        //  }
+        // if(checkType === "number"){
+        // return JSON.parse(JSON.stringify(this.carParts)).sort(function(a,b) {
+        //   return a[_sortBy] - b[_sortBy];
+        // }).slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
+
+        // };
+        //  if(_sortBy != ''){
+        //   console.log("sort by: ");
+        //   console.log(_sortBy);
+
+        //    return JSON.parse(JSON.stringify(this.carParts)).sort(function(a,b) {
+        //      const sortByNormalizedA = a[_sortBy].toLowerCase();
+        //      const sortByNormalizedB = b[_sortBy].toLowerCase();
+        //      if (sortByNormalizedA < sortByNormalizedB) {
+        //        return -1;
+               
+        //      }
+        //      if (sortByNormalizedA > sortByNormalizedB) {
+        //        return 1;
+        //      }
+        //      return 0;
+        //    }).slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
+        //  }else{
+        //  //return this.carParts.slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
+        //  }
+      }
+
+
+      //computed function
+      
+
+
+    },
+    async fetch() {
+        // this.$store.dispatch('getCarParts',this.filterby);
+       await this.$store.dispatch("getCarParts",this.filterby);
+        await this.$store.commit('setFilteredCarParts',this.$store.state.carParts);
+        await this.$store.dispatch('getCategories');
+        await this.$nuxt.$on(this.topic, this.processRecievedData);
+        await this.$store.dispatch('getCarMakers');
+         //remove duplicados
+         console.log("fetch");
+         this.carParts=JSON.parse(JSON.stringify(this.$store.state.filteredCarParts));
+        console.log("mounted car parts"+ this.carParts);
+         this.carMakers=JSON.parse(JSON.stringify(this.$store.state.carMakers)).sort(
+              (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
+      console.log("mounted makers"+this.carMakers);        
+
+              this.categorias=JSON.parse(JSON.stringify(this.$store.state.categories)).sort(
+              (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
+console.log("mounted cate"+this.categorias);
+
+        this.filterMakers();
+    },
+    mounted(){
+//teste
+console.log("mounted");
+     
+              
     },
     methods: {
       getMakerModels(_carMaker){
-        if (this.filteredCarMakers.length <2) {
-          console.log("getmakermodles maker: ",this.filteredCarMakers[0]);
+        
         this.$store.dispatch('getMakerModels',_carMaker);
         
        this.makerModels = this.$store.state.makerModels;
-        }
+        
         
       },
       refreshCarPart(){
@@ -306,16 +385,30 @@ export default {
         this.$store.dispatch('filterCarParts', this.filtros);
         this.refreshCarPart();
         //remove duplicados
-        let filteredMakers=[];
+       this.filterMakers();
+        //TODO ADICIONAR CAMPO MARCAS FAZER SET DAS MARCAS DEPOIS DE FILTRAR
+      },
+      filterMakers(){
+      let filteredMakers=[];
         
        this.carParts.forEach(element => {
          filteredMakers.push(element.carMaker);
        });
        filteredMakers=[...new Set(filteredMakers)];
        this.filteredCarMakers=filteredMakers;
-        //TODO ADICIONAR CAMPO MARCAS FAZER SET DAS MARCAS DEPOIS DE FILTRAR
       },
 
+
+
+      filterTableModels(){
+      let filteredTableModels=[];
+        
+       this.carParts.forEach(element => {
+         filteredTableModels.push(element.carModel);
+       });
+       filteredTableModels=[...new Set(filteredTableModels)];
+       this.tableMakerModels=filteredTableModels;
+      },
       //process recieved nuxt even data
       processRecievedData(data){
         this.newCarPart.rfid=data.rfid;
