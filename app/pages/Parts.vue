@@ -159,7 +159,7 @@
                     {{$index +1 }}
                 </div> -->
             </el-table-column>
-            <el-table-column prop="carModel" label="Modelo" sortable min-width="50" ></el-table-column>
+            <el-table-column prop="carModel" label="Modelo"  min-width="50" ></el-table-column>
             
 
             <el-table-column prop="type" label="Categoria"></el-table-column>
