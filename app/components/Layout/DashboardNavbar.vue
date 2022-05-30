@@ -26,6 +26,7 @@
 
 
      <!-- lupa -->
+<!--      
       <div class="search-bar input-group" @click="searchModalVisible = true">
         <button
           class="btn btn-link"
@@ -36,6 +37,7 @@
           <i class="tim-icons icon-zoom-split"></i>
         </button>
         <!-- You can choose types of search input -->
+        <!-- 
       </div>
 
       <modal
@@ -53,10 +55,11 @@
           id="inlineFormInputGroup"
           placeholder="SEARCH"
         />
-      </modal>
+      </modal> 
+      -->
 
       <!-- profile -->
-
+<!-- 
       <base-dropdown
         tag="li"
         :menu-on-right="!$rtl.isRTL"
@@ -83,6 +86,7 @@
           <a href="#" class="nav-item dropdown-item">Log out</a>
         </li>
       </base-dropdown>
+       -->
     </ul>
   </base-nav>
 </template>
