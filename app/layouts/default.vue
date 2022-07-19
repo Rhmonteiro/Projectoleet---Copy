@@ -39,6 +39,14 @@
           }"
         >
         </sidebar-item>
+         <sidebar-item
+          :link="{
+            name: 'Actualizar BD',
+            icon: 'tim-icons icon-app',
+            path: '/Updatedb'
+          }"
+        >
+        </sidebar-item>
       
       </template>
     </side-bar>
@@ -181,7 +189,8 @@ function hasElement(className) {
         
 
         //ex topic. "userId/did/variableId/sdata"
-        const subscribetopic = this.$store.state.auth.userData._id +"/+/+/sdata";
+        const subscribetopicsdata = this.$store.state.auth.userData._id +"/+/+/sdata";
+        const subscribetopicsinfo = this.$store.state.auth.userData._id +"/+/+/sinfo";
 
         const connectUrl = "ws://" + this.options.host + ":"+ this.options.port+ this.options.endpoint;
 
@@ -194,7 +203,24 @@ function hasElement(className) {
         this.client.on('connect', ()=>{
           console.log("connection success");
 
-          this.client.subscribe(subscribetopic, {qos: 0},(err)=>{
+          this.client.subscribe(subscribetopicsdata, {qos: 0},(err)=>{
+           
+           if(err){
+              console.log("error in subscribe topic");
+            }
+
+            console.log("subscribe topic success");
+            console.log(subscribetopic); 
+          
+          
+          });
+        });
+
+          //subscribe sinfo
+          this.client.on('connect', ()=>{
+          console.log("connection success");
+
+          this.client.subscribe(subscribetopicsinfo, {qos: 0},(err)=>{
            
            if(err){
               console.log("error in subscribe topic");

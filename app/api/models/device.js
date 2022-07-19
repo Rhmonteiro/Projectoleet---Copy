@@ -28,6 +28,7 @@ const deviceSchema = new Schema({
     name: { type: String, required: [true] },
     password: { type: String, required: [true] },
     selected: { type: Boolean, required: [true], default: false },
+    chargeLeft:{type:Number, default: 100},
     createdTime:{type: Number},
 
 });

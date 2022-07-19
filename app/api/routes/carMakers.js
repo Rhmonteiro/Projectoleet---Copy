@@ -154,10 +154,9 @@ router.post("/carmakers", checkAuth, async (req, res) => {
 //delete is like .get => req.query
 router.delete("/carmakers",checkAuth, async(req, res) => {
     try {
-        const carMakerName = req.query.name;
+        const carMakerId = req.query.id;
 
-        
-        const result = await CarMaker.deleteOne({ rfid: carMakerName });
+        const result = await CarMaker.deleteOne({ _id: carMakerId });
 
         const toSend = {
             status: "success",

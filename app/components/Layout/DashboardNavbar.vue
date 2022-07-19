@@ -87,6 +87,9 @@
         </li>
       </base-dropdown>
        -->
+       <base-dropdown  :title="selectedDeviceTitle" title-classes="nav-link" menu-classes="dropdown-navbar">
+       <a v-for="item,index in $store.state.devices " :key="item.name" class="dropdown-item" v-on:click="selectedDevice=item;selectDevice(index); selectedDeviceTitle=selectedDevice.name"> {{item.name}}</a>
+       </base-dropdown>
     </ul>
   </base-nav>
 </template>
@@ -122,13 +125,14 @@ export default {
       showMenu: false,
       searchModalVisible: false,
       searchQuery: '',
-      selectedDevice: null
+      selectedDevice: "" ,
+      selectedDeviceTitle:"Selecione o dispositivo"
     };
   },
   mounted(){
     this.$store.dispatch("getDevices");
     this.$store.dispatch("getNotifications");
-    this.$nuxt.$on("selectedDeviceIndex", this.updateSelectedDeviceIndex);
+    //this.$nuxt.$on("selectedDeviceIndex", this.updateSelectedDeviceIndex);
 
 
     },
@@ -141,8 +145,8 @@ export default {
     },
 
     //SELECT DEVICE
-    selectDevice(){
-        const device = this.$store.state.devices[this.selectedDevice];
+    selectDevice(index){
+        const device = this.$store.state.devices[index];
 
         const axiosHeaders={
           headers: {

@@ -69,7 +69,7 @@
 
             <el-table-column prop="password" label="Password"></el-table-column>
 
-
+            <el-table-column prop="chargeLeft" label="Bateria (%)"></el-table-column>
 
             <el-table-column label="Actions">
 

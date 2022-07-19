@@ -24,7 +24,7 @@ const Schema = mongoose.Schema;
 const carPartSchema = new Schema({
 
     userId: { type: String, required: [true] },
-    rfid:{type:String},
+    rfid:{type:String, unique:[true]},
     vehicleId: { type: String },
     type: { type: String, required: [true]},
     name: { type: String, required: [true] },
@@ -33,7 +33,9 @@ const carPartSchema = new Schema({
     price:{type: Number, required: [true]},
     createdTime: { type: Number },
     carMaker:{type:String},
-    carModel:{type:String}
+    carModel:{type:String},
+    vehicleID:{type:String},
+    whlocation:{type:String}
     
 });
 

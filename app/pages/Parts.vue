@@ -77,6 +77,16 @@
 
                  </div>
 
+                    <div class="col-4">
+                     <base-input 
+                     label="Localizção" 
+                     type="text" 
+                     placeholder="Ex: A1M1P2"
+                     v-model="newCarPart.whlocation"
+                     ></base-input>
+
+                 </div>
+
                  <!-- RFID TAG -->
                  <div class="col-4">
                      
@@ -106,7 +116,7 @@
        <div class="row pull-left">
           <div class="col-12">
             <base-button
-              @click="createNewCarPart()"
+              @click="createNewCarPart(),refreshCarPart()"
               type="primary"
               class="mb-3"
               size="lg"
@@ -167,6 +177,8 @@
             <el-table-column prop="name" label="nome"></el-table-column>
 
             <el-table-column prop="description" label="descrição"></el-table-column>
+
+            <el-table-column prop="whlocation" label="localização" min-width="50" align="left"></el-table-column>
 
             <el-table-column prop="state" label="estado" min-width="40"></el-table-column>
 
