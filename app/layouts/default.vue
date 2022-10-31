@@ -112,8 +112,8 @@ function hasElement(className) {
         sidebarBackground: 'vue', //vue|blue|orange|green|red|primary
         client: null,
         options: {
-            port: 8083,
-            host: 'localhost',
+            port: process.env.mqtt_port,
+            host: process.env.mqtt_host,
             endpoint:'/mqtt',
             clean: true,
             connectTimeOut: 5000,
@@ -125,6 +125,8 @@ function hasElement(className) {
             password: "",
           },
           nuxtTopic:"rfid",
+          currentSubTopicSData: "",
+          currentPubTopicRFID:"",
     };
     },
     computed: {
@@ -141,7 +143,7 @@ function hasElement(className) {
         const toSend={
           rfid:"1"
         };
-        this.client.publish("616d9fef9204163fa488d9e1/1/1/actdata", JSON.stringify(toSend))
+        this.client.publish(this.$store.state.auth.userData._id+"/" + this.$store.state.selectedDevice.dId +"/1/actdata", JSON.stringify(toSend));
       },
 
       async getMqttCredentials(){
@@ -189,7 +191,7 @@ function hasElement(className) {
         
 
         //ex topic. "userId/did/variableId/sdata"
-        const subscribetopicsdata = this.$store.state.auth.userData._id +"/+/+/sdata";
+        this.currentSubTopicSData = this.$store.state.auth.userData._id +"/+/+/sdata";
         const subscribetopicsinfo = this.$store.state.auth.userData._id +"/+/+/sinfo";
 
         const connectUrl = "ws://" + this.options.host + ":"+ this.options.port+ this.options.endpoint;
@@ -203,36 +205,34 @@ function hasElement(className) {
         this.client.on('connect', ()=>{
           console.log("connection success");
 
-          this.client.subscribe(subscribetopicsdata, {qos: 0},(err)=>{
+          this.client.subscribe(this.currentSubTopicSData, {qos: 0},(err)=>{
            
            if(err){
-              console.log("error in subscribe topic");
+              console.log("error in sdata subscribe topic");
             }
 
-            console.log("subscribe topic success");
-            console.log(subscribetopic); 
+            console.log("subscribe sdata topic success");
+            console.log(this.currentSubTopicSData); 
           
           
           });
-        });
 
-          //subscribe sinfo
-          this.client.on('connect', ()=>{
-          console.log("connection success");
-
+           //subscribe sinfo
           this.client.subscribe(subscribetopicsinfo, {qos: 0},(err)=>{
            
            if(err){
-              console.log("error in subscribe topic");
+              console.log("error in sinfo subscribe topic");
             }
 
-            console.log("subscribe topic success");
-            console.log(subscribetopic); 
+            console.log("subscribe sinfo topic success");
+            console.log(subscribetopicsinfo); 
           
           
           });
-
         });
+
+         
+          
 
         
         this.client.on('error', error => {
@@ -263,7 +263,7 @@ function hasElement(className) {
                 
                 // $nuxt.$emit(topic, JSON.parse(message.toString()));
                 if(message.rfid!=""){
-                  
+                  console.log("nuxt emit rfidin");
                   this.$nuxt.$emit("rfidIN",JSON.parse(message));
                 }
                 return;
@@ -277,6 +277,34 @@ function hasElement(className) {
             this.client.publish(toSend.topic, JSON.stringify(toSend.msg));
           });
 
+
+      },
+
+      updatePubSub(){
+
+        this.client.unsubscribe(this.currentSubTopicSData,(err)=>{
+           
+           if(err){
+              console.log("error in sdata unsubscribe topic");
+            }
+
+            console.log("unsubscribe sdata topic success");
+            console.log(this.currentSubTopicSData); 
+          
+          
+          });
+        this.currentSubTopicSData= this.$store.state.auth.userData._id +"/" + this.$store.state.selectedDevice.dId + "/+/sdata";
+        this.client.subscribe(this.currentSubTopicSData, {qos: 0},(err)=>{
+           
+           if(err){
+              console.log("error in sdata subscribe topic");
+            }
+
+            console.log("subscribe sdata topic success");
+            console.log(this.currentSubTopicSData); 
+          
+          
+          });
 
       },
 
@@ -304,6 +332,7 @@ function hasElement(className) {
       this.initScrollbar();
       this.startMqttClient();
       this.$nuxt.$on(this.nuxtTopic,this.publishGetRFID);
+      this.$nuxt.$on("subUnSub",this.updatePubSub);
     }
   };
 </script>

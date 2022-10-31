@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 const colors = require('colors');
 
-
+import SaverRule from '../models/emqx_saver_rule';
 
 const auth = {
     auth: {
@@ -70,10 +70,67 @@ async function listResources() {
         printWarning();
     }
 
-
+    await createSaverRule(1,true);
     //console.log(res.data.data);
 
 };
+
+async function createSaverRule( dId, status) {
+    
+    try {
+        const url = "http://localhost:8085/api/v4/rules";
+
+        const topic = "+/+/+/sinfo";
+
+        const rawsql = "SELECT topic, payload FROM \"" + topic + "\" WHERE payload.rssi != \"\" ";
+
+        var newRule = {
+            rawsql: rawsql,
+            actions: [
+                {
+                    name: "data_to_webserver",
+                    params: {
+                        $resource: global.saverResource.id,
+                        payload_tmpl: '{"payload":${payload},"topic":"${topic}"}'
+                    }
+                }
+            ],
+            description: "SAVER-RULE",
+            enabled: status
+        };
+
+        
+        const rStatus = await axios.get("http://localhost:8085/api/v4/resources/" + global.saverResource.id, auth);
+        // save rule in emqx
+        if (rStatus.data.data.status[0].is_alive === true) {
+            var res = await axios.post(url, newRule, auth);
+        } else {
+            console.log("Resource not connected or not alive");
+            return false;
+        }
+    
+
+        if (res.status === 200 && res.data.data ) {
+            console.log(res.data.data);
+
+            await SaverRule.create({
+                userId: "something",
+                dId: "tbd",
+                emqxRuleId: res.data.data.id,
+                status: status
+            });
+
+            return true;
+
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.log("Error creating rule");
+        console.log(error);
+        return false;
+    }
+}
 
 
 //create resources

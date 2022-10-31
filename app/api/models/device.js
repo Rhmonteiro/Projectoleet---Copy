@@ -29,7 +29,9 @@ const deviceSchema = new Schema({
     password: { type: String, required: [true] },
     selected: { type: Boolean, required: [true], default: false },
     chargeLeft:{type:Number, default: 100},
+    rssi:{type:Number, default: -140},
     createdTime:{type: Number},
+    lastUpdatedTime:{type:Number},
 
 });
 

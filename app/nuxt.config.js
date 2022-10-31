@@ -1,5 +1,10 @@
 export default {
   ssr: false,
+  server: {
+    port: 3000, // default: 3000
+    host: process.env.WEBSERVER_HOST, // default: localhost
+  },
+  
   /*
   ** Headers of the page
   */
@@ -65,9 +70,13 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
-    baseURL: "http://127.0.0.1:3001/api"
+    baseURL: "http://" + process.env.API_HOST +":"+process.env.API_PORT+"/api",
+    browserBaseURL: "http://" + process.env.API_HOST +":"+process.env.API_PORT +"/api"
   },
-
+  env:{
+    mqtt_port: process.env.EMQX_WEB_PORT,
+    mqtt_host: process.env.EMQX_WEB_HOST,
+  },
   /*
   ** Build configuration
   */

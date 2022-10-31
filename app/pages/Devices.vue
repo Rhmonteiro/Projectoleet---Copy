@@ -71,6 +71,8 @@
 
             <el-table-column prop="chargeLeft" label="Bateria (%)"></el-table-column>
 
+            <el-table-column prop="rssi" label="rssi (dBm)"></el-table-column>
+
             <el-table-column label="Actions">
 
                 <div slot-scope="{row, $index}">

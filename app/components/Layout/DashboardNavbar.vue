@@ -87,8 +87,10 @@
         </li>
       </base-dropdown>
        -->
-       <base-dropdown  :title="selectedDeviceTitle" title-classes="nav-link" menu-classes="dropdown-navbar">
-       <a v-for="item,index in $store.state.devices " :key="item.name" class="dropdown-item" v-on:click="selectedDevice=item;selectDevice(index); selectedDeviceTitle=selectedDevice.name"> {{item.name}}</a>
+       <base-dropdown  :title="selectedDeviceTitle" title-classes="btn btn-info" menu-classes="dropdown-black" >
+       <a v-for="item,index in $store.state.devices " :key="item.name" class="dropdown-item" v-on:click="selectedDevice=item;updateSelectedDeviceIndex(index); selectedDeviceTitle=selectedDevice.name"> {{item.name}}</a>
+       <div class="dropdown-divider"></div>
+       <a class="dropdown-item" v-on:click="selectedDevice='',selectedDeviceTitle='Selecione o Leitor RFID'">Nenhum</a>
        </base-dropdown>
     </ul>
   </base-nav>
@@ -126,7 +128,7 @@ export default {
       searchModalVisible: false,
       searchQuery: '',
       selectedDevice: "" ,
-      selectedDeviceTitle:"Selecione o dispositivo"
+      selectedDeviceTitle:"Selecione o Leitor RFID"
     };
   },
   mounted(){
@@ -141,7 +143,9 @@ export default {
 
     //UPDATE SELECTED DEVICE
     updateSelectedDeviceIndex(index){
-      this.selectedDevice = index;
+      this.selectedDevice = this.$store.state.devices[index];
+      this.$store.commit('setSelectedDevice',this.selectedDevice);
+      this.$nuxt.$emit("subUnSub")
     },
 
     //SELECT DEVICE
@@ -172,6 +176,24 @@ export default {
 
 
     },
+
+    // subUnSub(){
+
+    //     s
+    //     const subscribetopicsdata = "+/" + this.selectedDevice.dId +"/+/sdata";
+
+    //     this.client.subscribe(subscribetopicsdata, {qos: 0},(err)=>{
+           
+    //        if(err){
+    //           console.log("error in sdata subscribe topic");
+    //         }
+
+    //         console.log("subscribe sdata topic success");
+    //         console.log(subscribetopicsdata); 
+          
+          
+    //       });
+    // };
     
     capitalizeFirstLetter(string) {
       if (!string || typeof string !== 'string') {
@@ -219,8 +241,19 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style >
 .top-navbar {
   top: 0px;
 }
+.dropdown-item:hover {
+   color: #FFFFFf !important;
+}
+.btn-info,.btn-info:hover,.btn-info:focus,.btn-info:active{
+  background-image: linear-gradient(to left bottom,rgb(6, 161, 60), rgb(34, 210, 119), rgb(15, 107, 59) ) !important;
+}
+.btn-info:active:focus{
+  background-image: linear-gradient(to left bottom,rgb(6, 161, 60), rgb(34, 210, 119), rgb(15, 107, 59) ) !important;
+}
+
+
 </style>

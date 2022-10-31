@@ -164,7 +164,7 @@ router.post("/getmqttcredentialsforreconnection", checkAuth, async (req, res) =>
 
     setTimeout(() => {
         getWebUserMqttCredentials(userId);
-    }, 15000);
+    }, 30000);
 
 });
 

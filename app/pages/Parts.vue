@@ -9,10 +9,10 @@
             </div>
 
             <div class="row">
-                 <div class="col-1">
+                 <div class="col-4, flex-left">
                    <p>Categoria:</p>
                    <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary" v-bind="newCarPart"
-               :title="newCarPart.type">
+               :title="newCarPart.type" menu-classes="dropdown-black">
     <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="newCarPart.type=item.name"> {{item.name}}</a>
 </base-dropdown>
                     
@@ -23,23 +23,26 @@
                      v-model="newCarPart.type"
                      ></base-input> -->
                  </div>
-                 <div class="col-1">
+                 <div class="col-4, flex-left">
                    <p>Marca:</p>
                    <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
-               :title="newCarPart.carMaker">
+               :title="newCarPart.carMaker" menu-classes="dropdown-black">
     <a v-for="item in this.carMakers" :key="carMakers" class="dropdown-item" v-on:click="newCarPart.carMaker=item.name;getMakerModels(item.name)">{{item.name}}</a>
 </base-dropdown>
                  </div>
-                 <div class="col-1">
+                <div class="col-4, flex-left">
                    <p>Modelo:</p>
                    <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
-               :title="newCarPart.carModel">
+               :title="newCarPart.carModel" menu-classes="dropdown-black">
     <a v-for="item,index in this.$store.state.makerModels" :key="carMakers" class="dropdown-item" v-on:click="newCarPart.carModel=item">{{item}}</a>
 </base-dropdown>
+
                  </div>
-                 <div class="col-1"></div>
                  
-                 <div class="col-4">
+                 </div>
+
+                 <div class="row">
+                  <div class="col-4">
                      <base-input 
                      label="Nome" 
                      type="text" 
@@ -86,6 +89,9 @@
                      ></base-input>
 
                  </div>
+                 
+                 </div>
+                 
 
                  <!-- RFID TAG -->
                  <div class="col-4">
@@ -94,7 +100,7 @@
             RFID:  {{this.newCarPart.rfid}}
 </div>
                  </div>
-            </div>
+            <!-- </div> -->
        
        
        
@@ -139,15 +145,15 @@
 <div class="col-12, flex-left">
 <p class="text-left">Filtrar por: <br></p> 
 <base-dropdown style="display:inline-block" min-width="32"  title-classes="btn btn-secondary"
-               title="Categoria">
+               title="Categoria" menu-classes="dropdown-black">
     <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="resetFilteredCarPart();setFiltros('type',item.name);defaultPagination=1"> {{item.name}}</a>
 </base-dropdown>
 <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
-               title="Marca">
+               title="Marca" menu-classes="dropdown-black">
     <a v-for="item, index in this.filteredCarMakers" :key="filteredCarMakers" class="dropdown-item" v-on:click="setFiltros('carMaker',item);filterTableModels();defaultPagination=1"> {{item}}</a>
 </base-dropdown>
 <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary"
-               title="Modelo">
+               title="Modelo" menu-classes="dropdown-black">
     <a v-for="item,index in this.tableMakerModels" :key="makerModels" class="dropdown-item" v-on:click="setFiltros('carModel',item);defaultPagination=1">{{item}}</a>
 </base-dropdown>
 
@@ -163,13 +169,13 @@
         
         <el-table :data="pagedTableData" >
 
-            <el-table-column prop="rfid" label="RFID" min-width="50" ></el-table-column>
-            <el-table-column prop="carMaker" label="Marca" min-width="50" >
+            <el-table-column prop="rfid" label="RFID"  ></el-table-column>
+            <el-table-column prop="carMaker" label="Marca" >
                 <!-- <div slot-scope="{ row, $index}">
                     {{$index +1 }}
                 </div> -->
             </el-table-column>
-            <el-table-column prop="carModel" label="Modelo"  min-width="50" ></el-table-column>
+            <el-table-column prop="carModel" label="Modelo"  ></el-table-column>
             
 
             <el-table-column prop="type" label="Categoria"></el-table-column>
@@ -178,13 +184,13 @@
 
             <el-table-column prop="description" label="descrição"></el-table-column>
 
-            <el-table-column prop="whlocation" label="localização" min-width="50" align="left"></el-table-column>
+            <el-table-column prop="whlocation" label="localização"  align="left"></el-table-column>
 
-            <el-table-column prop="state" label="estado" min-width="40"></el-table-column>
+            <el-table-column prop="state" label="estado" ></el-table-column>
 
-            <el-table-column prop="price" label="preço" min-width="40"></el-table-column>
+            <el-table-column prop="price" label="preço" ></el-table-column>
 
-            <el-table-column label="Actions" min-width="40" align="right">
+            <el-table-column label="Actions" align="right">
 
                 <div slot-scope="{row, $index}">
                 
@@ -619,6 +625,21 @@ console.log("mounted");
 }
 </script>
 
-<style>
-
+<style >
+.btn-primary,.btn-primary:hover,.btn-primary:focus,.btn-primary:active{
+  background-image: linear-gradient(to left bottom,rgb(78, 164, 225), rgb(123, 70, 213), rgb(1, 26, 250) ) !important;
+}
+.btn-primary:active:focus{
+  background-image: linear-gradient(to left bottom,rgb(19, 218, 250), rgb(34, 94, 210), rgb(15, 60, 107) ) !important;
+}
+.dropdown-item:hover {
+   color: #FFFFFf !important;
+}
+.form-control:focus {
+  border-color: #6e4ee1 !important;
+}
+.page-item.active .page-link{
+  background-color: #1d8cf8 !important;
+  border-color: #1d8cf8 !important;
+}
 </style>

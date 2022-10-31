@@ -57,23 +57,47 @@ router.post('/saver-webhook', async (req, res) => {
     }
     
     const data = req.body;
-
+    console.log(data);
     const splittedTopic = data.topic.split("/");
     const dId = splittedTopic[1];
+    const userId = splittedTopic[0];
     const variable = splittedTopic[2];
+  
     
-    let result = await Device.find({ dId: dId, userId: data.userId });
+    try {
+      
+      const payload = data.payload;
+
+      console.log("saver webhook data: " + data+ "\n");
+      let result = await Device.find({ dId: dId, userId: userId });
+
 
     if (result.length === 1 ) {
-        Data.create({
-            userId: data.userId,
-            dId: dId,
-            variable: variable,
-            value: data.payload.value,
-            time: Date.now(),
-        })
-        console.log("Saver Data created".bgMagenta);
+      let updatedTime = Date.now();
+      const updateResult = await Device.updateOne({
+        dId:dId, userId:userId},{$set:{lastUpdatedTime: updatedTime , rssi:payload.rssi , chargeLeft:payload.bat
+      }})
+      
+      console.log(dId+ " "+ userId + " "+ payload.rssi+" "+payload.bat)
+      console.log("update device sinfo");
+      
+    console.log(updateResult);
     }
+    } catch (error) {
+      console.log(error + "2nd catcb")
+    }
+    
+
+    // if (result.length === 1 ) {
+    //     Data.create({
+    //         userId: data.userId,
+    //         dId: dId,
+    //         variable: variable,
+    //         value: data.payload.value,
+    //         time: Date.now(),
+    //     })
+    //     console.log("Saver Data created".bgMagenta);
+    // }
 
     res.sendStatus(200);
 
@@ -155,11 +179,12 @@ router.post("/getdevicecredentials", async(req,res)=>{
   
     res.json(toSend);
   
+    
     setTimeout(() => {
       getDeviceMqttCredentials(dId, userId);
       console.log("Device Credentials Updated");
     }, 10000);
-    
+
 });
 
 
@@ -185,8 +210,8 @@ async function getDeviceMqttCredentials(dId, userId) {
           userId: userId,
           username: makeid(10),
           password: makeid(10),
-          publish: [userId + "/" + dId + "/+/sdata"],
-          subscribe: [userId + "/" + dId + "/+/actdata"],
+          publish: ["+" + "/" + dId + "/+/sdata",userId + "/" + dId + "/+/sinfo" ],
+          subscribe: ["+/"+dId + "/+/actdata"],
           type: "device",
           time: Date.now(),
           updatedTime: Date.now()
@@ -215,6 +240,7 @@ async function getDeviceMqttCredentials(dId, userId) {
           }
         }
       );
+      await EmqxAuthRule.deleteMany({ type: 'device'});
   
       // update response example
       //{ n: 1, nModified: 1, ok: 1 }
@@ -231,6 +257,7 @@ async function getDeviceMqttCredentials(dId, userId) {
       console.log(error);
       return false;
     }
+    
   }
 
 //make id
