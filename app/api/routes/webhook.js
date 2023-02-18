@@ -183,7 +183,7 @@ router.post("/getdevicecredentials", async(req,res)=>{
     setTimeout(() => {
       getDeviceMqttCredentials(dId, userId);
       console.log("Device Credentials Updated");
-    }, 10000);
+    }, 100000);
 
 });
 

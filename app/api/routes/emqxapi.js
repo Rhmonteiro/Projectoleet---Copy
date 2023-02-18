@@ -29,13 +29,15 @@ async function listResources() {
     
     const url = "http://localhost:8085/api/v4/resources/";
 
-    const res = await axios.get(url, auth);
+    let res = await axios.get(url, auth);
 
-    const size = res.data.data.length;
+    let size = res.data.data.length;
 
     if (size == 0) {
         console.log("****** Creating emqx webhook*****".green);
-        createResources();
+        await createResources();
+        res = await axios.get(url, auth);
+        size = res.data.data.length;
     }else if (size == 2) {
         res.data.data.forEach(resource => {
             if (resource.description == "alarm-webhook") {
