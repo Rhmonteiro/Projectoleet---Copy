@@ -96,7 +96,7 @@
                  <!-- RFID TAG -->
                  <div class="col-4">
                      
-<div>
+<div style="color: azure;">
             RFID:  {{this.newCarPart.rfid}}
 </div>
                  </div>
