@@ -42,6 +42,7 @@
     "vue2-transitions": "^0.2.3"
   },
   "devDependencies": {
+    "@vue/runtime-dom": "latest",
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.17.10",
     "@babel/node": "^7.17.10",

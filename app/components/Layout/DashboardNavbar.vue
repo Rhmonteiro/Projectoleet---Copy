@@ -145,7 +145,7 @@ export default {
     updateSelectedDeviceIndex(index){
       this.selectedDevice = this.$store.state.devices[index];
       this.$store.commit('setSelectedDevice',this.selectedDevice);
-      this.$nuxt.$emit("subUnSub")
+      this.$nuxt.$emit("subUnSub");
     },
 
     //SELECT DEVICE

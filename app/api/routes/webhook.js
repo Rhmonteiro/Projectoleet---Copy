@@ -210,7 +210,7 @@ async function getDeviceMqttCredentials(dId, userId) {
           userId: userId,
           username: makeid(10),
           password: makeid(10),
-          publish: ["+" + "/" + dId + "/+/sdata",userId + "/" + dId + "/+/sinfo" ],
+          publish: ["+" + "/" + dId + "/+/sdata", "+/" + dId + "/+/sinfo","+/" + dId + "/+/notif"  ],
           subscribe: ["+/"+dId + "/+/actdata"],
           type: "device",
           time: Date.now(),
