@@ -12,9 +12,38 @@
                  <div class="col-4, flex-left">
                    <p>Categoria:</p>
                    <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary" v-bind="newCarPart"
-               :title="newCarPart.type" menu-classes="dropdown-black">
-    <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="newCarPart.type=item.name"> {{item.name}}</a>
-</base-dropdown>
+                   :title="newCarPart.type" menu-classes="dropdown-black">
+                      <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="newCarPart.type=item.name"> {{item.name}}</a>
+                  </base-dropdown>
+<!-- ////////////////////tesdting////////////////////// -->
+<!-- 
+    <div class="sub-title">list suggestions when activated</div>
+    <el-autocomplete
+      class="inline-input"
+      v-model="state1"
+      :fetch-suggestions="querySearchMaker"
+      placeholder="Please Input"
+      @select="handleSelect($event, 'state1')"
+    ><template slot-scope="{ item }">
+    <div class="dropdown-black">{{ item.name }}</div>
+    </template>
+  </el-autocomplete>
+    <div class="sub-title">list suggestions on input</div>
+    <el-autocomplete
+      class="inline-input"
+      v-model="state2"
+      :fetch-suggestions="querySearchModels"
+      placeholder="Please Input"
+      @select="handleSelect($event, 'state2')"
+    >
+    <template slot-scope="{ item }">
+    <div class="dropdown-black">{{ item.name }}</div>
+    </template>
+  </el-autocomplete>
+ -->
+
+
+                  <!-- ///////////////////////////////// -->
                     
                      <!-- <base-input 
                      label="Categoria" 
@@ -233,6 +262,7 @@
 import {BasePagination} from '@/components'
 import { Table, TableColumn } from "element-ui";
 import { Select, Option} from "element-ui";
+import { Autocomplete } from "element-ui";
 import { Client, MqttClient } from 'mqtt';
 
 export default {
@@ -242,10 +272,15 @@ export default {
         [TableColumn.name]: TableColumn,
         [Option.name]: Option,
         [Select.name]: Select,
-        BasePagination
+        BasePagination,
+        
+        [Autocomplete.name]: Autocomplete,
     },
     data(){
         return {
+          links: [],
+        state1: '',
+        state2: '',
           sortBy:"type",
           pageSize:10,
           defaultPagination:1,
@@ -379,10 +414,40 @@ console.log("mounted cate"+this.categorias);
     mounted(){
 //teste
 console.log("mounted");
+this.carMakers=this.$store.state.carMakers;
+
      
               
     },
     methods: {
+      querySearchMaker(queryString, cb) {
+        var carMakers = this.carMakers;
+        var results = queryString ? carMakers.filter(this.createFilter(queryString)) : carMakers;
+        // call callback function to return suggestions
+        console.log(results);
+        cb(results);
+      },
+      querySearchModels(queryString, cb) {
+        var carModels = this.makerModels;
+        var results = queryString ? carModels.filter(this.createFilter(queryString)) : carModels;
+        // call callback function to return suggestions
+        console.log("resultadosmodels");
+        console.log(results);
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (carMaker) => {
+          console.log("dentro filtros");
+          console.log(carMaker);
+            return carMaker.name.toLowerCase().indexOf(queryString.toLowerCase()) !==-1;
+        };
+      },
+      
+      handleSelect(item, vmodel) {
+        //check vmodel if vmodel is state1 then set state1 to item.name if vmodel is state2 then set state2 to item.name
+        this[vmodel] = item.name;
+        console.log(item.name);
+      },
       getMakerModels(_carMaker){
         
         this.$store.dispatch('getMakerModels',_carMaker);

@@ -26,7 +26,7 @@ services:
     links:
         - mongo
     extra_hosts: 
-      - "localhost:192.168.2.22"
+      - "localhost:10.6.16.170"
     # volumes:
     #   - vol-emqx-data:/opt/emqx/data
     #   - vol-emqx-etc:/opt/emqx/etc

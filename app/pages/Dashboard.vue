@@ -2,9 +2,9 @@
    
    <div>
     <div class="row">
-<div class="col-md-4">
+<div class="col-md-12">
         <card>
-            <h3>Teste 1</h3>
+            <h3>Distribuição de peças/categorias</h3>
           <Doughnut
           ref="skills_chart"
         :chart-data="chartData"
@@ -12,7 +12,7 @@
         </Doughnut>
         </card>
     </div>
-
+<!-- 
     <div class="col-md-4">
         <card>
             <h3>Teste 2</h3>
@@ -35,11 +35,11 @@
         </card>
     </div>
 
-
+  -->
 
     </div>
 
-    
+     <!--
     <div class="row-4">
         <card>
           <Doughnut
@@ -48,7 +48,7 @@
         :options="options">
         </Doughnut>
         </card>
-    </div>
+    </div> -->
    </div>
     
     

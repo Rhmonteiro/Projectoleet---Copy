@@ -9,7 +9,7 @@
             rel="noopener"
             class="nav-link"
           >
-            ProjectoLeet
+            ProjectoRDR
           </a>
         </li>
         <li class="nav-item">
@@ -22,6 +22,7 @@
             About Us
           </a>
         </li>
+         <!--
         <li class="nav-item">
           <a
             href="http://www.ipcb.pt"
@@ -31,10 +32,10 @@
           >
             Blog
           </a>
-        </li>
+        </li> -->
       </ul>
       <div class="copyright">
-        &copy; {{ year }}, made with <i class="tim-icons icon-heart-2"></i> by
+        <!-- &copy; {{ year }}--> 2021<!--,  made with <i class="tim-icons icon-heart-2"></i> by 
         
         <a
           href="https://github.com/Rhmonteiro"
@@ -42,7 +43,7 @@
           rel="noopener"
           >RM</a
         >
-        .
+        .-->
       </div>
     </div>
   </footer>
