@@ -69,13 +69,13 @@ router.post('/saver-webhook', async (req, res) => {
       const payload = data.payload;
 
       console.log("saver webhook data: " + data+ "\n");
-      let result = await Device.find({ dId: dId, userId: userId });
+      let result = await Device.find({ dId: dId});
 
 
     if (result.length === 1 ) {
       let updatedTime = Date.now();
       const updateResult = await Device.updateOne({
-        dId:dId, userId:userId},{$set:{lastUpdatedTime: updatedTime , rssi:payload.rssi , chargeLeft:payload.bat
+        dId:dId},{$set:{lastUpdatedTime: updatedTime , rssi:payload.rssi , chargeLeft:payload.bat
       }})
       
       console.log(dId+ " "+ userId + " "+ payload.rssi+" "+payload.bat)

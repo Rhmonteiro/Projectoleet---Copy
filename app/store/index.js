@@ -18,6 +18,7 @@ export const state = () => ({
     },
     rFiltros:{},
     makerModels:[],
+    categoriesCount:{},
 });
 
 export const mutations = {
@@ -57,6 +58,9 @@ export const mutations = {
     setMakerModels(state, makerModels){
         state.makerModels = makerModels;
     },
+    setCategoriesCount(state, categoriesCount) {
+        state.categoriesCount = categoriesCount;
+    },
 
 }
 
@@ -90,7 +94,7 @@ export const actions = {
 
             this.$axios.get("/device",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
 
                 res.data.data.forEach((device, index) => {
                     if (device.selected) {
@@ -218,13 +222,34 @@ async    getVehicles(){
                 headers: {
                     token : this.state.auth.token,
                     
-                }
+                },
             }
                await this.$axios.get("/category",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setCategories', res.data.data);
             });
+            const response={
+
+            }
+            await Promise.all(this.state.categories.map(async element => {
+                const axiosHeader= {
+                    headers: {
+                        token : this.state.auth.token,
+                        
+                    },
+                    params:{
+                        type:element.name
+                    },
+                };
+            await this.$axios.get("/categorycount",axiosHeader)
+                .then(res => {
+                    response[element.name]={"count":res.data.data}
+                    // console.log("response: "+JSON.stringify(response));
+                });
+                
+                this.commit('setCategoriesCount', response);
+            }))
             
     },
     //GET MAKERS
