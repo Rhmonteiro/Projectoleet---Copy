@@ -74,6 +74,35 @@ router.get("/vehicle", checkAuth, async (req, res) => {
    }
     
 });
+router.get("/vehicleMakers", checkAuth, async (req, res) => {
+   
+    try {
+
+        const userId = req.userData._id;
+        
+
+        
+        //get Vehicles
+        var vehiclesMakers = await Vehicle.find().distinct('maker');
+        vehiclesMakers = JSON.parse(JSON.stringify(vehiclesMakers));
+
+    
+       const toSend = {
+        status: "success",
+        data: vehiclesMakers
+    };
+    return res.status(200).json(toSend);
+   } catch (error) {
+        console.log("error getting vehicles");
+
+        const toSend = {
+            status: "error",
+            error: error
+        }
+        return res.status(500).json(toSend);
+   }
+    
+});
 //Create vehicle
 router.post("/vehicle", checkAuth, async (req, res) => {
 

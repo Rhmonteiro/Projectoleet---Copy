@@ -113,6 +113,16 @@
                     </base-button>
  
                 </el-tooltip>
+                <el-tooltip
+                content="Edit"
+                effect="light"
+                :open-delay="300"
+                placement="top"
+                >
+                    <base-button type="info" icon size="sm" class="btn-link" @click="goToAddPartPage()">
+                        <i class="tim-icons icon-simple-info"></i>
+                    </base-button>
+                </el-tooltip>
                 </div>
             </el-table-column>
 
@@ -157,6 +167,9 @@ export default {
         this.$store.dispatch('getVehicles');
     },
     methods: {
+      goToAddPartPage() {
+        this.$router.push("/Parts");
+      },
 
       //update rule status
       

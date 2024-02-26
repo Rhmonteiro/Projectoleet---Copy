@@ -31,7 +31,7 @@ router.get("/categorycount", checkAuth, async(req,res)=>{
         
         
         //get Vehicles
-        var categoryCount= await CarPart.countDocuments(filterBy, function (err, count) {
+        let categoryCount= await CarPart.countDocuments(filterBy, function (err, count) {
             if (err){
                 console.log(err)
             }else{
@@ -72,7 +72,7 @@ router.get("/category", checkAuth, async(req,res)=>{
         categories = JSON.parse(JSON.stringify(categories));
 
         const toSend={
-            status: "succes",
+            status: "success",
             data: categories
         };
         return res.status(200).json(toSend);

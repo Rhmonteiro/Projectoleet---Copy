@@ -52,23 +52,55 @@ export default {
         };
       },
       loadAll() {
-        return [
-          { "value": "vue", "link": "https://github.com/vuejs/vue" },
-          { "value": "element", "link": "https://github.com/ElemeFE/element" },
-          { "value": "cooking", "link": "https://github.com/ElemeFE/cooking" },
-          { "value": "mint-ui", "link": "https://github.com/ElemeFE/mint-ui" },
-          { "value": "vuex", "link": "https://github.com/vuejs/vuex" },
-          { "value": "vue-router", "link": "https://github.com/vuejs/vue-router" },
-          { "value": "babel", "link": "https://github.com/babel/babel" }
-         ];
+       
+        return results;
       },
       handleSelect(item) {
         console.log(item);
       }
     },
+    async fetch(){
+      await this.$store.dispatch('getCategories');
+
+    },
     mounted() {
-      this.links = this.loadAll();
+      let categorias=JSON.parse(JSON.stringify(this.$store.state.categories)).sort(
+              (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
+console.log("mounted cate"+categorias);
+ let resultados = [];
+ categorias.forEach(element => {
+  resultados.push({"value":element.name});
+ });
+      this.links = resultados;
     }
   }
   
 </script>
+<style>
+.el-input__inner, .el-scrollbar{
+  color: white !important;
+  background:linear-gradient(to bottom, #222a42 0%, #1d253b 100%)!important;
+  border-color: #344675 !important;
+ 
+}
+.el-input__inner:focus{
+  border-color: aquamarine !important ;
+  }
+.el-popper{
+  border-color: #344675 !important;
+}
+.el-autocomplete-sugestion {
+ background-color: aquamarine !important;
+ color: white !important;
+}
+.el-autocomplete-suggestion li{
+ color: rgba(255, 255, 255, 0.7) !important;
+}
+.el-autocomplete-suggestion li:hover{
+ color: white!important;
+ background-color: rgba(222, 222, 222, 0.3);
+}
+.sub-title{
+  color: white !important;
+}
+</style>
