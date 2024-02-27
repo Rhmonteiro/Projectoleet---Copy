@@ -11,10 +11,8 @@
             <div class="row">
                  <div class="col-4, flex-left">
                    <p>Categoria:</p>
-                   <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary" v-bind="newCarPart"
-                   :title="newCarPart.type" menu-classes="dropdown-black">
-                      <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="newCarPart.type=item.name"> {{item.name}}</a>
-                  </base-dropdown>
+                   <AutoCompletame :links="this.categorias" @update:state1="handleState3Update" valueKey="name" >
+                    </AutoCompletame>
 <!-- ////////////////////tesdting////////////////////// -->
 <!-- 
     <div class="sub-title">list suggestions when activated</div>
@@ -52,17 +50,16 @@
                      v-model="newCarPart.type"
                      ></base-input> -->
                  </div>
-                 <div class="col-4, flex-left">
+                 <div class="col-xs-2, flex-left">
                    <p>Marca:</p>
-                    <AutoCompletame :links="this.carMakers" @update:state1="handleState1Update" valueKey="name">
+                    <AutoCompletame :links="this.carMakers" @update:state1="handleState1Update" @update:selectedValue="getMakerModels" valueKey="name" >
                     </AutoCompletame>
                  </div>
-                <div class="col-4, flex-left">
+                <div class="col-xs-2, flex-left">
                    <p>Modelo:</p>
-                   <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
-               :title="newCarPart.carModel" menu-classes="dropdown-black">
-    <a v-for="item,index in this.$store.state.makerModels" :key="item" class="dropdown-item" v-on:click="newCarPart.carModel=item">{{item}}</a>
-</base-dropdown>
+                   <AutoCompletame :links="this.$store.state.makerModels" @update:state1="handleState2Update">
+                    </AutoCompletame>
+                   
 
                  </div>
                  
@@ -286,6 +283,8 @@ export default {
           links: [],
         state1: '',
         state2: '',
+        state3: '',
+        selectedValue: '',
           sortBy:"type",
           pageSize:10,
           defaultPagination:1,
@@ -428,6 +427,13 @@ this.carMakers=this.$store.state.carMakers;
       handleState1Update(newValue) {
       console.log('state1 updated to:', newValue);
         this.state1 = newValue;
+        this.newCarPart.carMaker = newValue;
+    },handleState2Update(newValue2) {
+        this.state2 = newValue2;
+        this.newCarPart.carModel = newValue2;
+    },handleState3Update(newValue3) {
+        this.state3 = newValue3;
+        this.newCarPart.type = newValue3;
     },
       querySearchMaker(queryString, cb) {
         var carMakers = this.carMakers;
