@@ -1,7 +1,6 @@
 <template>
     <el-row>
       <el-col :span="12">
-        <div class="sub-title">list suggestions on input</div>
         <el-autocomplete
           class="inline-input"
           v-model="state1"
@@ -71,7 +70,7 @@
   }
   
   .el-input__inner:focus {
-    border-color: aquamarine !important;
+    border-color: #6e4ee1 !important;
   }
   
   .el-popper {
@@ -79,7 +78,7 @@
   }
   
   .el-autocomplete-sugestion {
-    background-color: aquamarine !important;
+    background-color: #6e4ee1 !important;
     color: white !important;
   }
   

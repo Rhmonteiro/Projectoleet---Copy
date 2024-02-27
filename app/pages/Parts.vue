@@ -54,10 +54,8 @@
                  </div>
                  <div class="col-4, flex-left">
                    <p>Marca:</p>
-                   <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
-               :title="newCarPart.carMaker" menu-classes="dropdown-black">
-    <a v-for="item in this.carMakers" :key="item.name" class="dropdown-item" v-on:click="newCarPart.carMaker=item.name;getMakerModels(item.name)">{{item.name}}</a>
-</base-dropdown>
+                    <AutoCompletame :links="this.carMakers" @update:state1="handleState1Update" valueKey="name">
+                    </AutoCompletame>
                  </div>
                 <div class="col-4, flex-left">
                    <p>Modelo:</p>
