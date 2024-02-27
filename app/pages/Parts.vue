@@ -266,7 +266,7 @@
 
 
 <script>
-import {BasePagination} from '@/components'
+import {BasePagination, AutoCompletame} from '@/components'
 import { Table, TableColumn } from "element-ui";
 import { Select, Option} from "element-ui";
 import { Autocomplete } from "element-ui";
@@ -427,6 +427,10 @@ this.carMakers=this.$store.state.carMakers;
               
     },
     methods: {
+      handleState1Update(newValue) {
+      console.log('state1 updated to:', newValue);
+        this.state1 = newValue;
+    },
       querySearchMaker(queryString, cb) {
         var carMakers = this.carMakers;
         var results = queryString ? carMakers.filter(this.createFilter(queryString)) : carMakers;

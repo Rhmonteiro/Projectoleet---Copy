@@ -8,6 +8,7 @@
           :fetch-suggestions="querySearch"
           placeholder="Please Input"
           @select="handleSelect"
+          :value-key="valueKey"
         ></el-autocomplete>
       </el-col>
    
@@ -16,16 +17,23 @@
   
   <script>
   import { Autocomplete } from 'element-ui';
+  import { Row, Col } from 'element-ui';
   
   export default {
     props: {
       links: {
         type: Array,
         required: true
+      },
+      valueKey: {
+        type: String,
+        default: 'value'
       }
     },
     components: {
-      [Autocomplete.name]: Autocomplete
+      [Autocomplete.name]: Autocomplete,
+      [Row.name]: Row,
+      [Col.name]: Col
     },
     data() {
       return {
@@ -39,7 +47,7 @@
       },
       createFilter(queryString) {
         return (link) => {
-          return link.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
+          return link[this.valueKey].toLowerCase().indexOf(queryString.toLowerCase()) === 0;
         };
       },
       handleSelect(item) {
