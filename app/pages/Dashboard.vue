@@ -177,7 +177,7 @@ export default {
     border-right: 2px solid aquamarine;
     
 }
-@media (max-width:767px) {
+@media (max-width:768px) {
   .comBordasT{ 
     border-left: 0px solid aquamarine !important;
     border-top: 1px solid aquamarine;

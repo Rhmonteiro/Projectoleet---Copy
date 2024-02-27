@@ -151,7 +151,7 @@ async    getVehicles(){
     },
     //filterCarParts
      filterCarParts({commit,dispatch},filtros){
-         this.commit('setRFiltros',filtros);
+         this.commit('setRfiltros',filtros);
          let filteredCarPartss = [];
          
          Object.keys(this.state.filtros).forEach((key, index) =>{

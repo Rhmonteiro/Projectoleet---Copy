@@ -56,14 +56,14 @@
                    <p>Marca:</p>
                    <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
                :title="newCarPart.carMaker" menu-classes="dropdown-black">
-    <a v-for="item in this.carMakers" :key="carMakers" class="dropdown-item" v-on:click="newCarPart.carMaker=item.name;getMakerModels(item.name)">{{item.name}}</a>
+    <a v-for="item in this.carMakers" :key="item.name" class="dropdown-item" v-on:click="newCarPart.carMaker=item.name;getMakerModels(item.name)">{{item.name}}</a>
 </base-dropdown>
                  </div>
                 <div class="col-4, flex-left">
                    <p>Modelo:</p>
                    <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
                :title="newCarPart.carModel" menu-classes="dropdown-black">
-    <a v-for="item,index in this.$store.state.makerModels" :key="carMakers" class="dropdown-item" v-on:click="newCarPart.carModel=item">{{item}}</a>
+    <a v-for="item,index in this.$store.state.makerModels" :key="item" class="dropdown-item" v-on:click="newCarPart.carModel=item">{{item}}</a>
 </base-dropdown>
 
                  </div>
@@ -179,13 +179,20 @@
 </base-dropdown>
 <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
                title="Marca" menu-classes="dropdown-black">
-    <a v-for="item, index in this.filteredCarMakers" :key="filteredCarMakers" class="dropdown-item" v-on:click="setFiltros('carMaker',item);filterTableModels();defaultPagination=1"> {{item}}</a>
+    <a v-for="item, index in this.filteredCarMakers" :key="item" class="dropdown-item" v-on:click="setFiltros('carMaker',item);filterTableModels();defaultPagination=1"> {{item}}</a>
 </base-dropdown>
 <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary"
                title="Modelo" menu-classes="dropdown-black">
-    <a v-for="item,index in this.tableMakerModels" :key="makerModels" class="dropdown-item" v-on:click="setFiltros('carModel',item);defaultPagination=1">{{item}}</a>
+    <a v-for="item,index in this.tableMakerModels" :key="item" class="dropdown-item" v-on:click="setFiltros('carModel',item);defaultPagination=1">{{item}}</a>
 </base-dropdown>
-
+<base-button
+              @click="resetFilteredCarPart();setFiltros('type','null');setFiltros('carMaker','null');setFiltros('carModel','null');"
+              type="danger"
+              class="col-xs-2"
+              size="sm"
+              ><i class="tim-icons icon-simple-remove"></i>
+              </base-button
+            >
 
 
 </div>
