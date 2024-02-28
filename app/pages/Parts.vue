@@ -152,6 +152,19 @@
               size="lg"
               >Adicionar</base-button
             >
+<!-- botao gerar RFID -->
+<div class="row pull-right">
+  <div class="col-12">
+    <base-button
+      @click="generateRFID()"
+      type="primary"
+      class="mb-3"
+      size="lg"
+      >Gerar RFID</base-button
+    >
+  </div>
+</div>
+            
           </div>
         </div>
       </card>
@@ -424,6 +437,11 @@ this.carMakers=this.$store.state.carMakers;
               
     },
     methods: {
+generateRFID() {
+   const rfid = Math.floor(Math.random() * 1000000);
+   this.newCarPart.rfid = rfid;
+},
+      
       handleState1Update(newValue) {
       console.log('state1 updated to:', newValue);
         this.state1 = newValue;
