@@ -9,55 +9,20 @@
             </div>
 
             <div class="row">
-                 <div class="col-4, flex-left">
+                 <div class="col-md-4">
                    <p>Categoria:</p>
-                   <AutoCompletame :links="this.categorias" @update:state1="handleState3Update" valueKey="name" >
+                   <AutoCompletame v-model="newCarPart.type" :links="this.categorias" :state1="newCarPart.type" @update:state1="handleState3Update" valueKey="name" >
                     </AutoCompletame>
-<!-- ////////////////////tesdting////////////////////// -->
-<!-- 
-    <div class="sub-title">list suggestions when activated</div>
-    <el-autocomplete
-      class="inline-input"
-      v-model="state1"
-      :fetch-suggestions="querySearchMaker"
-      placeholder="Please Input"
-      @select="handleSelect($event, 'state1')"
-    ><template slot-scope="{ item }">
-    <div class="dropdown-black">{{ item.name }}</div>
-    </template>
-  </el-autocomplete>
-    <div class="sub-title">list suggestions on input</div>
-    <el-autocomplete
-      class="inline-input"
-      v-model="state2"
-      :fetch-suggestions="querySearchModels"
-      placeholder="Please Input"
-      @select="handleSelect($event, 'state2')"
-    >
-    <template slot-scope="{ item }">
-    <div class="dropdown-black">{{ item.name }}</div>
-    </template>
-  </el-autocomplete>
- -->
 
-
-                  <!-- ///////////////////////////////// -->
-                    
-                     <!-- <base-input 
-                     label="Categoria" 
-                     type="text" 
-                     placeholder="Ex: 00-00-AA, AA-00-00"
-                     v-model="newCarPart.type"
-                     ></base-input> -->
                  </div>
-                 <div class="col-xs-2, flex-left">
+                 <div class="col-md-4">
                    <p>Marca:</p>
-                    <AutoCompletame :links="this.carMakers" @update:state1="handleState1Update" @update:selectedValue="getMakerModels" valueKey="name" >
+                    <AutoCompletame v-model="newCarPart.carMaker" :state1="newCarPart.carMaker" :links="this.carMakers" @update:state1="handleState1Update" @update:selectedValue="getMakerModels" valueKey="name" >
                     </AutoCompletame>
                  </div>
-                <div class="col-xs-2, flex-left">
+                <div class="col-md-4">
                    <p>Modelo:</p>
-                   <AutoCompletame :links="this.$store.state.makerModels" @update:state1="handleState2Update">
+                   <AutoCompletame v-model="newCarPart.carModel" :state1="newCarPart.carModel" :links="this.$store.state.makerModels" @update:state1="handleState2Update">
                     </AutoCompletame>
                    
 
@@ -180,28 +145,42 @@
 <!-- TESTE FILTRO -->
 
 <div class="col-12, flex-left">
-<p class="text-left">Filtrar por: <br></p> 
-<base-dropdown style="display:inline-block" min-width="32"  title-classes="btn btn-secondary"
-               title="Categoria" menu-classes="dropdown-black">
-    <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="resetFilteredCarPart();setFiltros('type',item.name);defaultPagination=1"> {{item.name}}</a>
-</base-dropdown>
-<base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
-               title="Marca" menu-classes="dropdown-black">
-    <a v-for="item, index in this.filteredCarMakers" :key="item" class="dropdown-item" v-on:click="setFiltros('carMaker',item);filterTableModels();defaultPagination=1"> {{item}}</a>
-</base-dropdown>
-<base-dropdown style="display:inline-block"  title-classes="btn btn-secondary"
-               title="Modelo" menu-classes="dropdown-black">
-    <a v-for="item,index in this.tableMakerModels" :key="item" class="dropdown-item" v-on:click="setFiltros('carModel',item);defaultPagination=1">{{item}}</a>
-</base-dropdown>
-<base-button
-              @click="resetFilteredCarPart();setFiltros('type','null');setFiltros('carMaker','null');setFiltros('carModel','null');"
-              type="danger"
-              class="col-xs-2"
-              size="sm"
-              ><i class="tim-icons icon-simple-remove"></i>
-              </base-button
-            >
+<p class="text-left">Filtrar por: <br></p>
+<div class="row">
 
+  <div class="col-sm-2">
+    <p>Categoria:</p>
+                       <AutoCompletame v-model="catTextFilter" :state1="catTextFilter" :links="this.categorias"  @update:selectedValue="handleCatFilter"  valueKey="name" >
+                        </AutoCompletame>
+  
+    </div> 
+                      <div class="col-sm-4">
+                        <p>Marca:</p>
+                        <AutoCompletame v-model="makerTextFilter" :state1="makerTextFilter" :links="this.filteredCarMakers"  @update:selectedValue="handleMakerFilter"  >
+                        </AutoCompletame>
+                        </div>
+  <base-dropdown style="display:inline-block" min-width="32"  title-classes="btn btn-secondary"
+                 title="Categoria" menu-classes="dropdown-black">
+      <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="resetFilteredCarPart();setFiltros('type',item.name);defaultPagination=1"> {{item.name}}</a>
+  </base-dropdown>
+  <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
+                 title="Marca" menu-classes="dropdown-black">
+      <a v-for="item, index in this.filteredCarMakers" :key="item" class="dropdown-item" v-on:click="setFiltros('carMaker',item);filterTableModels();defaultPagination=1"> {{item}}</a>
+  </base-dropdown>
+  <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary"
+                 title="Modelo" menu-classes="dropdown-black">
+      <a v-for="item,index in this.tableMakerModels" :key="item" class="dropdown-item" v-on:click="setFiltros('carModel',item);defaultPagination=1">{{item}}</a>
+  </base-dropdown>
+  <base-button
+                @click="resetFilteredCarPart();setFiltros('type','null');setFiltros('carMaker','null');setFiltros('carModel','null');catTextFilter='';makerTextFilter='';defaultPagination=1"
+                type="danger"
+                class="col-xs-2"
+                size="sm"
+                ><i class="tim-icons icon-simple-remove"></i>
+                </base-button
+              >
+
+</div>  
 
 </div>
 
@@ -297,6 +276,9 @@ export default {
         state1: '',
         state2: '',
         state3: '',
+        catTextFilter: '',
+        makerTextFilter: '',
+        thisStateCatFilter: '',
         selectedValue: '',
           sortBy:"type",
           pageSize:10,
@@ -437,6 +419,35 @@ this.carMakers=this.$store.state.carMakers;
               
     },
     methods: {
+      handleStateCatFilter(newValue4) {
+        this.stateCatFilter = newValue4;
+        console.log('stateCatFilter updated to:', this.stateCatFilter);
+        if(this.stateCatFilter === ""){
+          this.resetFilteredCarPart();
+          this.setFiltros('type','null');
+
+          return;
+        }
+    },
+    handleCatFilter(item){
+      console.log("handleCatFilter");
+      this.resetFilteredCarPart();
+      this.setFiltros('type',item);
+    },
+    handleStateMakerFilter(newValue5) {
+      this.stateMakerFilter = newValue5;
+      console.log('stateMakerFilter updated to:', this.stateMakerFilter);
+      if(this.stateMakerFilter === ""){
+        this.resetFilteredCarPart();
+        this.setFiltros('carMaker','null');
+        return;
+      }
+    },
+    handleMakerFilter(item){
+      console.log("handleMakerFilter " + JSON.stringify(item.value));
+      this.setFiltros('carMaker',item);
+      this.filterTableModels();
+    },
 generateRFID() {
    const rfid = Math.floor(Math.random() * 1000000);
    this.newCarPart.rfid = rfid;
@@ -538,6 +549,7 @@ generateRFID() {
       },
 
       //update rule status
+      
       
 
        //new vehicle

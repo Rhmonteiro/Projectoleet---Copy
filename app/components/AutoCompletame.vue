@@ -3,6 +3,8 @@
       <el-col>
         <el-autocomplete
           class="inline-input"
+          :value="state1"
+          @input="updateValue"
           v-model="state1"
           :fetch-suggestions="querySearch"
           placeholder="Please Input"
@@ -32,6 +34,10 @@
       clearable: {
         type: Boolean,
         default: true
+      },
+      state1: {
+        type: String,
+        required: true
       }
     },
     components: {
@@ -41,7 +47,6 @@
     },
     data() {
       return {
-        state1: '',
       };
     },
     methods: {
@@ -73,17 +78,14 @@
         }
       },
       handleSelect(item) {
-        if (this.links.length > 0 && typeof this.links[0] === 'object') {
         this.$emit('update:selectedValue', item[this.valueKey]);
-        } else {
-          this.$emit('update:selectedValue', item);
-        }
+        
+      },
+      updateValue(value){
+        this.$emit('input', value);
       }
     },
     watch: {
-      state1(newValue) {
-        this.$emit('update:state1', newValue);
-      }
     }
   };
   </script>
