@@ -154,12 +154,31 @@
                         </AutoCompletame>
   
     </div> 
-                      <div class="col-sm-4">
+                      <div class="col-sm-2">
                         <p>Marca:</p>
                         <AutoCompletame v-model="makerTextFilter" :state1="makerTextFilter" :links="this.filteredCarMakers"  @update:selectedValue="handleMakerFilter"  >
                         </AutoCompletame>
                         </div>
-  <base-dropdown style="display:inline-block" min-width="32"  title-classes="btn btn-secondary"
+
+                        <div class="col-sm-2">
+                        <p>Marca:</p>
+                        <AutoCompletame v-model="modelTextFilter" :state1="modelTextFilter" :links="this.tableMakerModels" @update:state1="filterTableModels"  @update:selectedValue="handleModelFilter"  ></AutoCompletame>
+                        </AutoCompletame>
+                        </div>
+
+                          <div class="row-sm-2 align-self-end position-relative">
+  
+  
+                            <base-button
+                                          @click="resetFilteredCarPart();setFiltros('type','null');setFiltros('carMaker','null');setFiltros('carModel','null');catTextFilter='';makerTextFilter='';defaultPagination=1; filterTableModels();modelTextFilter='';"
+                                          type="danger"
+                                          class="col-sm-2"
+                                          size="sm"
+                                          ><i class="tim-icons icon-simple-remove"></i>
+                                          </base-button
+                                        >
+                        </div>
+ <!--  <base-dropdown style="display:inline-block" min-width="32"  title-classes="btn btn-secondary"
                  title="Categoria" menu-classes="dropdown-black">
       <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="resetFilteredCarPart();setFiltros('type',item.name);defaultPagination=1"> {{item.name}}</a>
   </base-dropdown>
@@ -170,15 +189,7 @@
   <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary"
                  title="Modelo" menu-classes="dropdown-black">
       <a v-for="item,index in this.tableMakerModels" :key="item" class="dropdown-item" v-on:click="setFiltros('carModel',item);defaultPagination=1">{{item}}</a>
-  </base-dropdown>
-  <base-button
-                @click="resetFilteredCarPart();setFiltros('type','null');setFiltros('carMaker','null');setFiltros('carModel','null');catTextFilter='';makerTextFilter='';defaultPagination=1"
-                type="danger"
-                class="col-xs-2"
-                size="sm"
-                ><i class="tim-icons icon-simple-remove"></i>
-                </base-button
-              >
+  </base-dropdown> -->
 
 </div>  
 
@@ -279,6 +290,8 @@ export default {
         catTextFilter: '',
         makerTextFilter: '',
         thisStateCatFilter: '',
+        modelTextFilter: '',
+        stateMakerFilter: '',
         selectedValue: '',
           sortBy:"type",
           pageSize:10,
@@ -301,14 +314,14 @@ export default {
             newCarPart: {
               userId: "",
               vehicleId: "",
-              type: "Categoria",
+              type: "",
               name: "",
               description: "",
               state: "",
               price:"",
               rfid:"",
-              carMaker:"Marca",
-              carModel:"Modelo",
+              carMaker:"",
+              carModel:"",
             },
             topic:"rfidIN"
         }   
@@ -433,7 +446,15 @@ this.carMakers=this.$store.state.carMakers;
       console.log("handleCatFilter");
       this.resetFilteredCarPart();
       this.setFiltros('type',item);
+      this.filterTableModels();
     },
+handleModelFilter(item){
+  console.log("handleModelFilter");
+  this.resetFilteredCarPart();
+  this.setFiltros('carModel',item);
+  this.filterTableModels();
+},
+
     handleStateMakerFilter(newValue5) {
       this.stateMakerFilter = newValue5;
       console.log('stateMakerFilter updated to:', this.stateMakerFilter);
@@ -443,6 +464,16 @@ this.carMakers=this.$store.state.carMakers;
         return;
       }
     },
+handleStateModelFilter(newValue6) {
+  this.stateModelFilter = newValue6;
+  console.log('stateModelFilter updated to:', this.stateModelFilter);
+  if(this.stateModelFilter === ""){
+    this.resetFilteredCarPart();
+    this.setFiltros('carModel','null');
+    return;
+  }
+},
+    
     handleMakerFilter(item){
       console.log("handleMakerFilter " + JSON.stringify(item.value));
       this.setFiltros('carMaker',item);
