@@ -43,7 +43,7 @@ export default {
         var links = this.links;
         var results = queryString ? links.filter(this.createFilter(queryString)) : links;
         // call callback function to return suggestions
-        console.log(results)
+        // console.log(results)
         cb(results);
       },
       createFilter(queryString) {
@@ -56,7 +56,7 @@ export default {
         return results;
       },
       handleSelect(item) {
-        console.log(item);
+        // console.log(item);
       }
     },
     async fetch(){
@@ -66,7 +66,7 @@ export default {
     mounted() {
       let categorias=JSON.parse(JSON.stringify(this.$store.state.categories)).sort(
               (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
-console.log("mounted cate"+categorias);
+// console.log("mounted cate"+categorias);
  let resultados = [];
  categorias.forEach(element => {
   resultados.push({"value":element.name});

@@ -218,7 +218,7 @@ export default {
               message:
                 "Failed to create new device - resource offline or not connected"
             });
-            console.log(e);
+            // console.log(e);
             return;
           } else {
             this.showNotify("danger", "Error");
@@ -257,7 +257,7 @@ export default {
           return;
         })
         .catch(e => {
-          console.log(e);
+          // console.log(e);
           this.$notify({
             type: "danger",
             icon: "tim-icons icon-alert-circle-exc",
@@ -292,7 +292,7 @@ export default {
           return;
         })
         .catch(e => {
-          console.log(e);
+          // console.log(e);
           this.$notify({
             type: "danger",
             icon: "tim-icons icon-alert-circle-exc",

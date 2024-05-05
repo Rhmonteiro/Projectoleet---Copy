@@ -37,10 +37,10 @@
       </div>
       <div class="col-md-6">
         <card>
-          <h3>Distribuição de carros/categorias</h3>
+          <h3>Distribuição de peças/marca</h3>
           <Doughnut
             ref="skills_chart"
-            :chart-data="chartData"
+            :chart-data="chartDataItemBrand"
             :options="options"
           ></Doughnut>
         </card>
@@ -66,10 +66,10 @@ const options = {
     duration: 500,
     easing: 'easeInOutQuint',
     onProgress: function(animation) {
-     // console.log('Progress: ' + animation.animationObject.currentStep + '/' + animation.animationObject.numSteps);
+     // // console.log('Progress: ' + animation.animationObject.currentStep + '/' + animation.animationObject.numSteps);
     },
     onComplete: function() {
-     // console.log('Completed animation!');
+     // // console.log('Completed animation!');
     }
   },
   elements:{
@@ -117,6 +117,16 @@ export default {
           {
             backgroundColor:['#00876c','#51a676','#88c580','#c2e38c','#ffff9d','#fdd172','#f7a258','#ea714e','#d43d51'],// ['#289435','#1ebaab','#942828'],
             data: catCounts,//this.getTotalsByCategories(),
+          }
+        ]
+      },
+      chartDataItemBrand: {
+        labels: store.state.carParts.map(value => value.carMaker).filter((value, index, self) => self.indexOf(value) === index),
+        datasets: [
+          {
+            backgroundColor:['#00876c','#51a676','#88c580','#c2e38c','#ffff9d','#fdd172','#f7a258','#ea714e','#d43d51'],// ['#289435','#1ebaab','#942828'],
+            data: catCounts,//this.getTotalsByCategories(),
+            
           }
         ]
       }

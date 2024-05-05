@@ -19,6 +19,7 @@ export const state = () => ({
     rFiltros:{},
     makerModels:[],
     categoriesCount:{},
+    selectedVehicle:{}
 });
 
 export const mutations = {
@@ -61,6 +62,9 @@ export const mutations = {
     setCategoriesCount(state, categoriesCount) {
         state.categoriesCount = categoriesCount;
     },
+    setSelectedVehicle(state, selectedVehicle){
+        state.selectedVehicle = selectedVehicle;
+    }
 
 }
 
@@ -172,7 +176,7 @@ async    getVehicles(){
           });
         //  let testType = "type";
         // let filteredCarPartss = carParts.filter(carPart => carPart[testType] == "Carrosaria");
-        console.log("filteredCarParts->" + filteredCarPartss);
+        // console.log("filteredCarParts->" + filteredCarPartss);
         //this.commit('setFilteredCarParts',filteredCarPartss);
     },
 
@@ -182,8 +186,9 @@ async    getVehicles(){
         let filterByName = filterBy.category;
         let filterByBrand = filterBy.brand;
         let filterByModel = filterBy.model;
-        console.log("filterByName= " +filterByName);
-            if (filterByName =="null" && filterByBrand =="null" && filterByModel =="null") {
+        let filterByVehicleId = filterBy.vehicleId;
+        // console.log("filterByName= " +filterByName);
+            if (filterByName =="null" && filterByBrand =="null" && filterByModel =="null"&& filterByVehicleId =="null") {
             const axiosHeader= {
                 
                 headers: {
@@ -193,15 +198,15 @@ async    getVehicles(){
 
             await this.$axios.get("/carpart",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setCarParts', res.data.data);
                 this.commit('setFilteredCarParts',res.data.data);
             })
             } else {
-                console.log("byModel-> "+filterByModel);
+                // console.log("byModel-> "+filterByModel);
             const axiosHeader= {
                 
-                params: {type: filterByName, brand: filterByBrand, model: filterByModel},
+                params: {type: filterByName, brand: filterByBrand, model: filterByModel, vehicleId: filterByVehicleId},
                 headers: {
                     token : this.state.auth.token
                 }
@@ -209,7 +214,7 @@ async    getVehicles(){
 
             await this.$axios.get("/carpart",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setCarParts', res.data.data);
                 this.commit('setFilteredCarParts',res.data.data);
             })
@@ -262,7 +267,7 @@ async    getCarMakers(){
         }
          await   this.$axios.get("/carmakers",axiosHeader)
         .then(res => {
-            console.log(res.data.data);
+            // console.log(res.data.data);
             this.commit('setCarMakers', res.data.data);
         });
         

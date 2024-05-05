@@ -22,7 +22,7 @@ export default {
     methods: {
         querySearch(queryString, cb) {
             const results = queryString ? this.links.filter(link => link.toLowerCase().includes(queryString.toLowerCase())) : this.links;
-            console.log("results "+results);
+            // console.log("results "+results);
             cb(results);
         },
     },

@@ -119,7 +119,7 @@
                 :open-delay="300"
                 placement="top"
                 >
-                    <base-button type="info" icon size="sm" class="btn-link" @click="goToAddPartPage()">
+                    <base-button type="info" icon size="sm" class="btn-link" @click="goToAddPartPage($index)">
                         <i class="tim-icons icon-simple-info"></i>
                     </base-button>
                 </el-tooltip>
@@ -167,8 +167,8 @@ export default {
         this.$store.dispatch('getVehicles');
     },
     methods: {
-      goToAddPartPage() {
-        this.$router.push("/Parts");
+      goToAddPartPage(index) {
+        this.$router.push({ path: '/partsOfVehicle', query: { vehicle: this.$store.state.vehicles[index]}});
       },
 
       //update rule status
@@ -278,7 +278,7 @@ export default {
               message:
                 "Failed to create new device - resource offline or not connected"
             });
-            console.log(e);
+            // console.log(e);
             return;
           } else {
             this.showNotify("danger", "Error");
@@ -318,7 +318,7 @@ export default {
           return;
         })
         .catch(e => {
-          console.log(e);
+          // console.log(e);
           this.$notify({
             type: "danger",
             icon: "tim-icons icon-alert-circle-exc",
@@ -353,7 +353,7 @@ export default {
           return;
         })
         .catch(e => {
-          console.log(e);
+          // console.log(e);
           this.$notify({
             type: "danger",
             icon: "tim-icons icon-alert-circle-exc",

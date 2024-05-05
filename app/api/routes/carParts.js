@@ -24,6 +24,8 @@ const axios = require('axios');
 
 
 import CarPart from "../models/carPart.js";
+// const CarPartAnalytics = require('../models/CarPartAnalytics.js'); // replace with your actual analytics model path
+
 
 /*
  █████╗ ██████╗ ██╗
@@ -146,6 +148,35 @@ router.delete("/carpart",checkAuth, async(req, res) => {
     }
 
 });
+
+
+// const changeStream = CarPart.watch();
+
+// changeStream.on('change', async (change) => {
+//     switch (change.operationType) {
+//         case 'insert':
+//             // A new document was inserted. Update the analytics collection accordingly.
+//             await CarPartAnalytics.updateOne(
+//                 { carMaker: change.fullDocument.carMaker },
+//                 { $inc: { count: 1 } },
+//                 { upsert: true }
+//             );
+//             break;
+//         case 'delete':
+//             // A document was deleted. Update the analytics collection accordingly.
+//             await CarPartAnalytics.updateOne(
+//                 { carMaker: change.documentKey._id },
+//                 { $inc: { count: -1 } }
+//             );
+//             break;
+//         case 'update':
+//         case 'replace':
+//             // A document was updated or replaced. If the carMaker field was updated, you need to decrement the count for the old carMaker and increment the count for the new carMaker.
+//             // This is more complex and may require an additional query to get the old document.
+//             break;
+//     }
+// });
+
 
 //UPDATE 
 /*
