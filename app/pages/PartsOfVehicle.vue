@@ -5,7 +5,9 @@
         <div class="row">
 <card>
             <div slot="header">
-                <h4 class="card-title">Adicionar Peça ao veiculo de matricula  {{this.$store.state.selectedVehicle.plate}}</h4>
+                <h4 class="card-title">Adicionar Peça ao veiculo de matricula:</h4>
+                
+                <h2 class="text-success" > {{this.$store.state.selectedVehicle.plate}}</h2>
             </div>
 
             <div class="row">
@@ -373,17 +375,17 @@ export default {
               this.categorias=JSON.parse(JSON.stringify(this.$store.state.categories)).sort(
               (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
 
-        this.filterMakers();
-        this.setFiltros('vehicleId',this.filterby.vehicleId);
-      this.filterTableModels();
-      if(this.$route.query.vehicle._id!=undefined){
-        this.$store.commit('setSelectedVehicle',this.$route.query.vehicle);
-        console.log('selected vehicle: '+this.$store.state.selectedVehicle.maker);
-        this.newCarPart.carMaker=this.$store.state.selectedVehicle.maker;
-        console.log('carMaker:' +this.newCarPart.carMaker);
-        this.newCarPart.carModel=this.$store.state.selectedVehicle.carModel;
-        this.newCarPart.vehicleId=this.$store.state.selectedVehicle._id;
-      }
+              if(this.$route.query.vehicle._id!=undefined){
+                this.$store.commit('setSelectedVehicle',this.$route.query.vehicle);
+                console.log('selected vehicle: '+this.$store.state.selectedVehicle.maker);
+                this.newCarPart.carMaker=this.$store.state.selectedVehicle.maker;
+                console.log('carMaker:' +this.newCarPart.carMaker);
+                this.newCarPart.carModel=this.$store.state.selectedVehicle.carModel;
+                this.newCarPart.vehicleId=this.$store.state.selectedVehicle._id;
+              }
+              this.filterMakers();
+              this.setFiltros('vehicleId',this.filterby.vehicleId);
+            this.filterTableModels();
     },
     mounted(){
     
