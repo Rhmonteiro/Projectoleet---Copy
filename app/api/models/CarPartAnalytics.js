@@ -10,6 +10,6 @@ const carPartAnalyticsSchema = new Schema({
 
 carPartAnalyticsSchema.plugin(uniqueValidator, { message: 'Error, expected carMaker to be unique.' });
 
-const CarPartAnalytics = mongoose.model('CarMakerAnalytics', carPartAnalyticsSchema);
+const CarPartAnalytics = mongoose.model('CarPartAnalytics', carPartAnalyticsSchema);
 
 export default CarPartAnalytics;

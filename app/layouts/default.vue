@@ -17,14 +17,6 @@
         </sidebar-item>
         <sidebar-item
           :link="{
-            name: 'Dispositivos',
-            icon: 'tim-icons icon-wifi',
-            path: '/Devices'
-          }"
-        >
-        </sidebar-item>
-        <sidebar-item
-          :link="{
             name: 'Veiculos',
             icon: 'tim-icons icon-bus-front-12',
             path: '/Vehicles'
@@ -36,6 +28,14 @@
             name: 'Peças',
             icon: 'tim-icons icon-app',
             path: '/Parts'
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: 'Dispositivos',
+            icon: 'tim-icons icon-wifi',
+            path: '/Devices'
           }"
         >
         </sidebar-item>

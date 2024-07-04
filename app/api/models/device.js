@@ -32,6 +32,7 @@ const deviceSchema = new Schema({
     rssi:{type:Number, default: -140},
     createdTime:{type: Number},
     lastUpdatedTime:{type:Number},
+    deleted: { type: Boolean, default: false, required: [true]},
 
 });
 

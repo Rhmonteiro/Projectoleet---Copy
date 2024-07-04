@@ -160,6 +160,7 @@ export default {
               km:"",
               year:"",
               abate: true,
+              deleted: false,
             }
         }   
     },
@@ -168,7 +169,7 @@ export default {
     },
     methods: {
       goToAddPartPage(index) {
-        this.$router.push({ path: '/partsOfVehicle', query: { vehicle: this.$store.state.vehicles[index]}});
+        this.$router.push({ path: '/partsOfVehicle', query: { vehicle: this.$store.state.vehicles[index]._id}});
       },
 
       //update rule status

@@ -7,3 +7,9 @@ app/bla/
 app/.vscode/
 app/static/sw.js
 Ec2-RDR-projecto.pem
+services/mongodataBak.zip
+services/mongo2_data
+services/mongo2_config
+services/mongo3_data
+services/mongo3_config
+services/mongokey

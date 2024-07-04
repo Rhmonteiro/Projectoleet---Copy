@@ -11,6 +11,7 @@
           @select="handleSelect"
           :value-key="valueKey"
           :clearable="clearable"
+          :disabled="disabled"
         ></el-autocomplete>
       </el-col>
    
@@ -38,6 +39,10 @@
       state1: {
         type: String,
         required: true
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
     components: {

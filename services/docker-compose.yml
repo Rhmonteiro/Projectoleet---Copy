@@ -26,7 +26,7 @@
       links:
           - mongo
       extra_hosts: 
-        - "localhost:192.168.1.74"
+        - "localhost:192.168.12.125"
       # volumes:
       #   - vol-emqx-data:/opt/emqx/data
       #   - vol-emqx-etc:/opt/emqx/etc
@@ -79,18 +79,48 @@
         EMQX_LOADED_PLUGINS: "emqx_recon,eqmx_retainer,emqx_management,emqx_dashboard,emqx_auth_mongo"
     
     mongo:
+      hostname: mongo
       container_name: mongo
       image: mongo:4.4
+      command: --replSet rs0 --keyFile /etc/mongo-keyfile/mongo-keyFile --port 27017
       restart: unless-stopped
       ports:
         - 27017:27017
-
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
       volumes:
         - ./mongodata:/data/db
-
+        - ./mongokey:/etc/mongo-keyfile
       environment:
         TZ: "Europe/Portugal/Lisbon"
         MONGO_INITDB_ROOT_USERNAME: "dev"
         MONGO_INITDB_ROOT_PASSWORD: "devpw3"
       
-      
+    mongo2:
+      hostname: mongo2
+      container_name: mongo2
+      image: mongo:4.4
+      command: --replSet rs0 --keyFile /etc/mongo-keyfile/mongo-keyFile --port 27018
+      ports:
+        - 27018:27018
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      volumes:
+        - "./mongo2_data:/data/db"
+        - "./mongo2_config:/data/configdb"
+        - ./mongokey:/etc/mongo-keyfile
+
+    mongo3:
+      hostname: mongo3
+      container_name: mongo3
+      image: mongo:4.4
+      command: --replSet rs0 --keyFile /etc/mongo-keyfile/mongo-keyFile  --port 27019
+      ports:
+        - 27019:27019
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      volumes:
+        - "./mongo3_data:/data/db"
+        - "./mongo3_config:/data/configdb"
+        - ./mongokey:/etc/mongo-keyfile
+

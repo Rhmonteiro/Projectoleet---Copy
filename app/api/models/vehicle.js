@@ -32,6 +32,8 @@ const vehicleSchema = new Schema({
     abate: { type: Boolean, required: [true], default: true },
     state: { type: String },
     createdTime:{type: Number},
+    deleted: { type: Boolean, default: false, required: [true]},
+    
 
 });
 

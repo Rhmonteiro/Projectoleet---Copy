@@ -34,7 +34,8 @@ const carPartSchema = new Schema({
     createdTime: { type: Number },
     carMaker:{type:String},
     carModel:{type:String},
-    whlocation:{type:String}
+    whlocation:{type:String},
+    deleted: { type: Boolean, default: false, required: [true]},
     
 });
 

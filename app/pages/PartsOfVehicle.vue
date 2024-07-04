@@ -19,12 +19,12 @@
                  </div>
                  <div class="col-md-4">
                    <p>Marca:</p>
-                    <AutoCompletame v-model="newCarPart.carMaker" :state1="newCarPart.carMaker" :links="this.carMakers" @update:state1="handleState1Update" @update:selectedValue="getMakerModels" valueKey="name" >
+                    <AutoCompletame v-model="newCarPart.carMaker" :disabled="true" :state1="newCarPart.carMaker" :links="this.carMakers" @update:state1="handleState1Update" @update:selectedValue="getMakerModels" valueKey="name" >
                     </AutoCompletame>
                  </div>
                 <div class="col-md-4">
                    <p>Modelo:</p>
-                   <AutoCompletame v-model="newCarPart.carModel" :state1="newCarPart.carModel" :links="this.$store.state.makerModels" @update:state1="handleState2Update">
+                   <AutoCompletame v-model="newCarPart.carModel" :disabled="true" :state1="newCarPart.carModel" :links="this.$store.state.makerModels" @update:state1="handleState2Update">
                     </AutoCompletame>
                    
 
@@ -162,7 +162,7 @@
   
   
                             <base-button
-                                          @click="resetFilteredCarPart();setFiltros('type','null');setFiltros('carMaker','null');setFiltros('carModel','null');setFiltros('vehicleId',filterby.vehicleId);catTextFilter='';makerTextFilter='';defaultPagination=1; filterTableModels();modelTextFilter='';"
+                                          @click="resetFilteredCarPart();setFiltros('vehicleId',filterby.vehicleId);setFiltros('type','null');setFiltros('carMaker','null');setFiltros('carModel','null');catTextFilter='';makerTextFilter='';defaultPagination=1; filterTableModels();modelTextFilter='';"
                                           type="danger"
                                           class="col-sm-2"
                                           size="sm"
@@ -362,37 +362,39 @@ export default {
     },
     async fetch() {
         // this.$store.dispatch('getCarParts',this.filterby);
+        this.filterby.vehicleId=this.$route.query.vehicle;
+      // console.log("fetch: "+ this.filterby.vehicleId);
        await this.$store.dispatch("getCarParts",this.filterby);
-        await this.$store.commit('setFilteredCarParts',this.$store.state.carParts);
+       // await this.$store.commit('setFilteredCarParts',this.$store.state.carParts);
         await this.$store.dispatch('getCategories');
         await this.$nuxt.$on(this.topic, this.processRecievedData);
-        await this.$store.dispatch('getCarMakers');
+       // await this.$store.dispatch('getCarMakers');
          //remove duplicados
-         this.carParts=JSON.parse(JSON.stringify(this.$store.state.filteredCarParts));
-         this.carMakers=JSON.parse(JSON.stringify(this.$store.state.carMakers)).sort(
-              (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
+        // this.carParts=JSON.parse(JSON.stringify(this.$store.state.filteredCarParts));
+        //  this.carMakers=JSON.parse(JSON.stringify(this.$store.state.carMakers)).sort(
+        //       (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
 
               this.categorias=JSON.parse(JSON.stringify(this.$store.state.categories)).sort(
               (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
 
-              if(this.$route.query.vehicle._id!=undefined){
-                this.$store.commit('setSelectedVehicle',this.$route.query.vehicle);
-                console.log('selected vehicle: '+this.$store.state.selectedVehicle.maker);
+              if(this.$route.query.vehicle!=undefined){
+               await this.$store.dispatch('getSelectedVehicleInfo',this.$route.query.vehicle);
+               this.newCarPart.userId=this.$store.state.auth.userData._id;
                 this.newCarPart.carMaker=this.$store.state.selectedVehicle.maker;
-                console.log('carMaker:' +this.newCarPart.carMaker);
                 this.newCarPart.carModel=this.$store.state.selectedVehicle.carModel;
                 this.newCarPart.vehicleId=this.$store.state.selectedVehicle._id;
+                await this.setFiltros('vehicleId',this.filterby.vehicleId);
+                await this.filterTableModels();
+                await this.filterMakers();
               }
-              this.filterMakers();
-              this.setFiltros('vehicleId',this.filterby.vehicleId);
-            this.filterTableModels();
+              
     },
     mounted(){
     
 //teste
-// // console.log("mounted");
-// // console.log("query: "+JSON.stringify(this.$route.query.vehicle.abate) );
-this.filterby.vehicleId=this.$store.state.selectedVehicle._id;
+// console.log("mounted");
+// console.log("query: "+JSON.stringify(this.$route.query.vehicle.abate) );
+//this.filterby.vehicleId=this.$store.state.selectedVehicle._id;
 Object.keys(this.$store.state.selectedVehicle).forEach(key => {
   // // console.log("key: "+key);
   // // console.log("value: "+this.$route.query.vehicle[key]);
@@ -462,7 +464,7 @@ generateRFID() {
 },
       
       handleState1Update(newValue) {
-       console.log('state1 updated to:', newValue);
+      //  console.log('state1 updated to:', newValue);
         this.state1 = newValue;
         this.newCarPart.carMaker = newValue;
     },handleState2Update(newValue2) {
@@ -517,6 +519,8 @@ generateRFID() {
       setFiltros(type,name){
         this.$store.state.filtros=this.filtros;             
         this.filtros[type]=name;
+        // console.log("filtros SETFILTROS: "+JSON.stringify(this.filtros));
+        // console.log("filtros NAME: "+name);
         this.$store.dispatch('filterCarParts', this.filtros);
         this.refreshCarPart();
         //remove duplicados

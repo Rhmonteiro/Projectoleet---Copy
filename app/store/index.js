@@ -121,7 +121,7 @@ export const actions = {
 
       await  this.$axios.get("/makermodels",axiosHeader)
         .then(res => {
-            console.log(res.data.data);
+            // console.log(res.data.data);
             this.commit('setMakerModels', res.data.data);
         })
     },
@@ -135,7 +135,7 @@ export const actions = {
 
             this.$axios.get("/item",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setItems', res.data.data);
             })
     },
@@ -149,19 +149,35 @@ async    getVehicles(){
 
       await      this.$axios.get("/vehicle",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setVehicles', res.data.data);
             })
+    },
+    //get selectedVehicleInfo
+
+    async getSelectedVehicleInfo({commit},vehicleId){
+        const axiosHeader= {
+            params:{vehicleId:vehicleId},
+            headers: {
+                token : this.state.auth.token
+            }
+        }
+
+        await this.$axios.get("/vehicle",axiosHeader)
+        .then(res => {
+            // console.log(res.data.data);
+            this.commit('setSelectedVehicle', res.data.data[0]);
+        })
     },
     //filterCarParts
      filterCarParts({commit,dispatch},filtros){
          this.commit('setRfiltros',filtros);
+        //  console.log('filtros'+ JSON.stringify(filtros));
          let filteredCarPartss = [];
          
          Object.keys(this.state.filtros).forEach((key, index) =>{
             filteredCarPartss =this.state.filteredCarParts.filter(carPart =>{
-
-                if (filtros[key]!="null") {
+                if (filtros[key]!="null" && filtros[key]!="" && filtros[key] != undefined) {
                     if (carPart[key].toLowerCase() == filtros[key].toLowerCase()) {
                         return true;
                     } 
