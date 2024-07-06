@@ -219,6 +219,25 @@ router.delete("/carpart",checkAuth, async(req, res) => {
 
 });
 
+router.get("/location", checkAuth, async (req, res) => {
+    try {
+        const locations = await CarPart.distinct("whlocation");
+        const toSend = {
+            status: "success",
+            data: locations
+        };
+        return res.status(200).json(toSend);
+    } catch (error) {
+        console.log("ERROR GETTING LOCATION");
+        console.log(error);
+        const toSend = {
+            status: "error",
+            error: error
+        };
+        console.log(toSend);
+        return res.status(500).json(toSend);
+    }
+});
 
 const changeStream = Vehicle.watch();
 

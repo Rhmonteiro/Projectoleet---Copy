@@ -19,7 +19,8 @@ export const state = () => ({
     rFiltros:{},
     makerModels:[],
     categoriesCount:{},
-    selectedVehicle:{}
+    selectedVehicle:{},
+    locations:[]
 });
 
 export const mutations = {
@@ -64,6 +65,9 @@ export const mutations = {
     },
     setSelectedVehicle(state, selectedVehicle){
         state.selectedVehicle = selectedVehicle;
+    },
+    setLocations(state, locations){
+        state.locations = locations;
     }
 
 }
@@ -288,7 +292,19 @@ async    getCarMakers(){
         });
         
 },
-
+async getLocations(){
+    const axiosHeader= {
+        headers: {
+            token : this.state.auth.token,
+            
+        }
+    }
+     await   this.$axios.get("/location",axiosHeader)
+     .then(res => {
+         console.log(res.data.data);
+        this.commit('setLocations', res.data.data);
+        });
+},
 
 
     //GET TOKEN FROM LOCALSTORAGE

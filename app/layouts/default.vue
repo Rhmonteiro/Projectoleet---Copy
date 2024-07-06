@@ -33,6 +33,14 @@
         </sidebar-item>
         <sidebar-item
           :link="{
+            name: 'Inventário',
+            icon: 'tim-icons icon-single-copy-04',
+            path: '/inventory'
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
             name: 'Dispositivos',
             icon: 'tim-icons icon-wifi',
             path: '/Devices'
