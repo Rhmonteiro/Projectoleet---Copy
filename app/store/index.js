@@ -18,6 +18,9 @@ export const state = () => ({
     },
     rFiltros:{},
     makerModels:[],
+    categoriesCount:{},
+    selectedVehicle:{},
+    locations:[]
 });
 
 export const mutations = {
@@ -57,6 +60,15 @@ export const mutations = {
     setMakerModels(state, makerModels){
         state.makerModels = makerModels;
     },
+    setCategoriesCount(state, categoriesCount) {
+        state.categoriesCount = categoriesCount;
+    },
+    setSelectedVehicle(state, selectedVehicle){
+        state.selectedVehicle = selectedVehicle;
+    },
+    setLocations(state, locations){
+        state.locations = locations;
+    }
 
 }
 
@@ -90,7 +102,7 @@ export const actions = {
 
             this.$axios.get("/device",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
 
                 res.data.data.forEach((device, index) => {
                     if (device.selected) {
@@ -113,7 +125,7 @@ export const actions = {
 
       await  this.$axios.get("/makermodels",axiosHeader)
         .then(res => {
-            console.log(res.data.data);
+            // console.log(res.data.data);
             this.commit('setMakerModels', res.data.data);
         })
     },
@@ -127,7 +139,7 @@ export const actions = {
 
             this.$axios.get("/item",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setItems', res.data.data);
             })
     },
@@ -141,19 +153,35 @@ async    getVehicles(){
 
       await      this.$axios.get("/vehicle",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setVehicles', res.data.data);
             })
     },
+    //get selectedVehicleInfo
+
+    async getSelectedVehicleInfo({commit},vehicleId){
+        const axiosHeader= {
+            params:{vehicleId:vehicleId},
+            headers: {
+                token : this.state.auth.token
+            }
+        }
+
+        await this.$axios.get("/vehicle",axiosHeader)
+        .then(res => {
+            // console.log(res.data.data);
+            this.commit('setSelectedVehicle', res.data.data[0]);
+        })
+    },
     //filterCarParts
      filterCarParts({commit,dispatch},filtros){
-         this.commit('setRFiltros',filtros);
+         this.commit('setRfiltros',filtros);
+        //  console.log('filtros'+ JSON.stringify(filtros));
          let filteredCarPartss = [];
          
          Object.keys(this.state.filtros).forEach((key, index) =>{
             filteredCarPartss =this.state.filteredCarParts.filter(carPart =>{
-
-                if (filtros[key]!="null") {
+                if (filtros[key]!="null" && filtros[key]!="" && filtros[key] != undefined) {
                     if (carPart[key].toLowerCase() == filtros[key].toLowerCase()) {
                         return true;
                     } 
@@ -168,7 +196,7 @@ async    getVehicles(){
           });
         //  let testType = "type";
         // let filteredCarPartss = carParts.filter(carPart => carPart[testType] == "Carrosaria");
-        console.log("filteredCarParts->" + filteredCarPartss);
+        // console.log("filteredCarParts->" + filteredCarPartss);
         //this.commit('setFilteredCarParts',filteredCarPartss);
     },
 
@@ -178,8 +206,9 @@ async    getVehicles(){
         let filterByName = filterBy.category;
         let filterByBrand = filterBy.brand;
         let filterByModel = filterBy.model;
-        console.log("filterByName= " +filterByName);
-            if (filterByName =="null" && filterByBrand =="null" && filterByModel =="null") {
+        let filterByVehicleId = filterBy.vehicleId;
+        // console.log("filterByName= " +filterByName);
+            if (filterByName =="null" && filterByBrand =="null" && filterByModel =="null"&& filterByVehicleId =="null") {
             const axiosHeader= {
                 
                 headers: {
@@ -189,15 +218,15 @@ async    getVehicles(){
 
             await this.$axios.get("/carpart",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setCarParts', res.data.data);
                 this.commit('setFilteredCarParts',res.data.data);
             })
             } else {
-                console.log("byModel-> "+filterByModel);
+                // console.log("byModel-> "+filterByModel);
             const axiosHeader= {
                 
-                params: {type: filterByName, brand: filterByBrand, model: filterByModel},
+                params: {type: filterByName, brand: filterByBrand, model: filterByModel, vehicleId: filterByVehicleId},
                 headers: {
                     token : this.state.auth.token
                 }
@@ -205,7 +234,7 @@ async    getVehicles(){
 
             await this.$axios.get("/carpart",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setCarParts', res.data.data);
                 this.commit('setFilteredCarParts',res.data.data);
             })
@@ -218,13 +247,34 @@ async    getVehicles(){
                 headers: {
                     token : this.state.auth.token,
                     
-                }
+                },
             }
                await this.$axios.get("/category",axiosHeader)
             .then(res => {
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 this.commit('setCategories', res.data.data);
             });
+            const response={
+
+            }
+            await Promise.all(this.state.categories.map(async element => {
+                const axiosHeader= {
+                    headers: {
+                        token : this.state.auth.token,
+                        
+                    },
+                    params:{
+                        type:element.name
+                    },
+                };
+            await this.$axios.get("/categorycount",axiosHeader)
+                .then(res => {
+                    response[element.name]={"count":res.data.data}
+                    // console.log("response: "+JSON.stringify(response));
+                });
+                
+                this.commit('setCategoriesCount', response);
+            }))
             
     },
     //GET MAKERS
@@ -237,12 +287,24 @@ async    getCarMakers(){
         }
          await   this.$axios.get("/carmakers",axiosHeader)
         .then(res => {
-            console.log(res.data.data);
+            // console.log(res.data.data);
             this.commit('setCarMakers', res.data.data);
         });
         
 },
-
+async getLocations(){
+    const axiosHeader= {
+        headers: {
+            token : this.state.auth.token,
+            
+        }
+    }
+     await   this.$axios.get("/location",axiosHeader)
+     .then(res => {
+         console.log(res.data.data);
+        this.commit('setLocations', res.data.data);
+        });
+},
 
 
     //GET TOKEN FROM LOCALSTORAGE

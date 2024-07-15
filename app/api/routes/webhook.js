@@ -69,13 +69,13 @@ router.post('/saver-webhook', async (req, res) => {
       const payload = data.payload;
 
       console.log("saver webhook data: " + data+ "\n");
-      let result = await Device.find({ dId: dId, userId: userId });
+      let result = await Device.find({ dId: dId});
 
 
     if (result.length === 1 ) {
       let updatedTime = Date.now();
       const updateResult = await Device.updateOne({
-        dId:dId, userId:userId},{$set:{lastUpdatedTime: updatedTime , rssi:payload.rssi , chargeLeft:payload.bat
+        dId:dId},{$set:{lastUpdatedTime: updatedTime , rssi:payload.rssi , chargeLeft:payload.bat
       }})
       
       console.log(dId+ " "+ userId + " "+ payload.rssi+" "+payload.bat)
@@ -183,7 +183,7 @@ router.post("/getdevicecredentials", async(req,res)=>{
     setTimeout(() => {
       getDeviceMqttCredentials(dId, userId);
       console.log("Device Credentials Updated");
-    }, 10000);
+    }, 100000);
 
 });
 
@@ -210,7 +210,7 @@ async function getDeviceMqttCredentials(dId, userId) {
           userId: userId,
           username: makeid(10),
           password: makeid(10),
-          publish: ["+" + "/" + dId + "/+/sdata",userId + "/" + dId + "/+/sinfo" ],
+          publish: ["+" + "/" + dId + "/+/sdata", "+/" + dId + "/+/sinfo","+/" + dId + "/+/notif"  ],
           subscribe: ["+/"+dId + "/+/actdata"],
           type: "device",
           time: Date.now(),

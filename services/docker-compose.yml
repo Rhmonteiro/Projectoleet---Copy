@@ -1,96 +1,126 @@
-version: "3.8"
+  version: "3.8"
 
-# volumes:
-#   vol-emqx-data:
-#     name: foo-emqx-data
-#   vol-emqx-etc:
-#     name: foo-emqx-etc
-#   vol-emqx-log:
-#     name: foo-emqx-log
-
-
-services:
-
-  emqx:
-    container_name: emqx
-    image: emqx/emqx:4.2.3
-    restart: always
-    ports:
-      - 18083:18083
-      - 18084:18084
-      - 1883:1883
-      - 8083:8083
-      - 8883:8883
-      - 8084:8084
-      - 8085:8081
-    links:
-        - mongo
-    extra_hosts: 
-      - "localhost:192.168.1.81"
-    # volumes:
-    #   - vol-emqx-data:/opt/emqx/data
-    #   - vol-emqx-etc:/opt/emqx/etc
-    #   - vol-emqx-log:/opt/emqx/log
-
-    environment: 
-      #listener.tcp.external.max_connections
-
-      EMQX_NAME: ProjectoLeet2021RM-gl
-      EMQX_HOST: 127.0.0.1
-
-      #default dash pass
-      EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "Naomexe"
-      EMQX_LISTENER__TCP__EXTERNAL__MAX_CONNECTIONS: 1000
-
-    #default app secret
-      EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET: "emqxsecret"
-      EMQX_ALLOW_ANONYMOUS: "false"
-      EMQX_NOMATCH: "deny"
-
-      # MONGO CONNECTION
-      EMQX_AUTH__MONGO__TYPE: single
-      EMQX_AUTH__MONGO__SERVER: "mongo:27017"
-      EMQX_AUTH__MONGO__POOL: 8
-
-      EMQX_AUTH__MONGO__LOGIN: "dev"
-      EMQX_AUTH__MONGO__PASSWORD: "devpw3"
-      EMQX_AUTH__MONGO__AUTH_SOURCE: admin
-
-      EMQX_AUTH__MONGO__DATABASE: "ioticos_god_level"
-      EMQX_AUTH__MONGO__AUTH_QUERY__COLLECTION: "emqxauthrules"
-      
-      
-      EMQX_AUTH__MONGO__SUPER_QUERY__COLLECTION: "emqxauthrules"
-      EMQX_AUTH__MONGO__SUPER_QUERY__SUPER_FIELD: "is_superuser"
-      EMQX_AUTH__MONGO__SUPER_QUERY__SELECTOR: "username=%u"
-      EMQX_AUTH__MONGO__SUPER_QUERY: "off"
-
-      EMQX_AUTH__MONGO__AUTH_QUERY__PASSWORD_HASH: plain
-      EMQX_AUTH__MONGO__AUTH_QUERY__PASSWORD_FILED: "password"
-      EMQX_AUTH__MONGO__AUTH_QUERY__SELECTOR: "username=%u"
+  # volumes:
+  #   vol-emqx-data:
+  #     name: foo-emqx-data
+  #   vol-emqx-etc:
+  #     name: foo-emqx-etc
+  #   vol-emqx-log:
+  #     name: foo-emqx-log
 
 
-      ## ENABLE ACL QUERY
-      #Access controll list
-      EMQX_AUTH__MONGO__ACL_QUERY: "on"
-      EMQX_AUTH__MONGO__ACL_QUERY__COLLECTION: "emqxauthrules"
-      EMQX_AUTH__MONGO__ACL_QUERY__SELECTOR: "username=%u"
+  services:
 
-      EMQX_LOADED_PLUGINS: "emqx_recon,eqmx_retainer,emqx_management,emqx_dashboard,emqx_auth_mongo"
+    emqx:
+      container_name: emqx
+      image: emqx/emqx:4.2.3
+      restart: always
+      ports:
+        - 18083:18083
+        - 18084:18084
+        - 1883:1883
+        - 8083:8083
+        - 8883:8883
+        - 8084:8084
+        - 8085:8081
+      links:
+          - mongo
+      extra_hosts: 
+        - "localhost:192.168.1.74"
+      # volumes:
+      #   - vol-emqx-data:/opt/emqx/data
+      #   - vol-emqx-etc:/opt/emqx/etc
+      #   - vol-emqx-log:/opt/emqx/log
 
-  mongo:
-    container_name: mongo
-    image: mongo:4.4
-    restart: unless-stopped
-    ports:
-      - 27017:27017
+      environment: 
+        #listener.tcp.external.max_connections
 
-    volumes:
-      - ./mongodata:/data/db
+        EMQX_NAME: ProjectoRM2024
+        EMQX_HOST: 127.0.0.1
 
-    environment:
-      TZ: "Europe/Portugal/Lisbon"
-      MONGO_INITDB_ROOT_USERNAME: "dev"
-      MONGO_INITDB_ROOT_PASSWORD: "devpw3"
+        #default dash pass
+        EMQX_DASHBOARD__DEFAULT_USER__PASSWORD: "Naomexe"
+        EMQX_LISTENER__TCP__EXTERNAL__MAX_CONNECTIONS: 1000
+
+      #default app secret
+        EMQX_MANAGEMENT__DEFAULT_APPLICATION__SECRET: "emqxsecret"
+        EMQX_ALLOW_ANONYMOUS: "false"
+        EMQX_NOMATCH: "deny"
+
+        # MONGO CONNECTION
+        EMQX_AUTH__MONGO__TYPE: single
+        EMQX_AUTH__MONGO__SERVER: "mongo:27017"
+        EMQX_AUTH__MONGO__POOL: 8
+
+        EMQX_AUTH__MONGO__LOGIN: "dev"
+        EMQX_AUTH__MONGO__PASSWORD: "devpw3"
+        EMQX_AUTH__MONGO__AUTH_SOURCE: admin
+
+        EMQX_AUTH__MONGO__DATABASE: "ioticos_god_level"
+        EMQX_AUTH__MONGO__AUTH_QUERY__COLLECTION: "emqxauthrules"
+        
+        
+        EMQX_AUTH__MONGO__SUPER_QUERY__COLLECTION: "emqxauthrules"
+        EMQX_AUTH__MONGO__SUPER_QUERY__SUPER_FIELD: "is_superuser"
+        EMQX_AUTH__MONGO__SUPER_QUERY__SELECTOR: "username=%u"
+        EMQX_AUTH__MONGO__SUPER_QUERY: "off"
+
+        EMQX_AUTH__MONGO__AUTH_QUERY__PASSWORD_HASH: plain
+        EMQX_AUTH__MONGO__AUTH_QUERY__PASSWORD_FILED: "password"
+        EMQX_AUTH__MONGO__AUTH_QUERY__SELECTOR: "username=%u"
+
+
+        ## ENABLE ACL QUERY
+        #Access controll list
+        EMQX_AUTH__MONGO__ACL_QUERY: "on"
+        EMQX_AUTH__MONGO__ACL_QUERY__COLLECTION: "emqxauthrules"
+        EMQX_AUTH__MONGO__ACL_QUERY__SELECTOR: "username=%u"
+
+        EMQX_LOADED_PLUGINS: "emqx_recon,eqmx_retainer,emqx_management,emqx_dashboard,emqx_auth_mongo"
     
-    
+    mongo:
+      hostname: mongo
+      container_name: mongo
+      image: mongo:4.4
+      command: --replSet rs0 --keyFile /etc/mongo-keyfile/mongo-keyFile --port 27017
+      restart: unless-stopped
+      ports:
+        - 27017:27017
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      volumes:
+        - ./mongodata:/data/db
+        - ./mongokey:/etc/mongo-keyfile
+      environment:
+        TZ: "Europe/Portugal/Lisbon"
+        MONGO_INITDB_ROOT_USERNAME: "dev"
+        MONGO_INITDB_ROOT_PASSWORD: "devpw3"
+      
+    mongo2:
+      hostname: mongo2
+      container_name: mongo2
+      image: mongo:4.4
+      command: --replSet rs0 --keyFile /etc/mongo-keyfile/mongo-keyFile --port 27018
+      ports:
+        - 27018:27018
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      volumes:
+        - "./mongo2_data:/data/db"
+        - "./mongo2_config:/data/configdb"
+        - ./mongokey:/etc/mongo-keyfile
+
+    mongo3:
+      hostname: mongo3
+      container_name: mongo3
+      image: mongo:4.4
+      command: --replSet rs0 --keyFile /etc/mongo-keyfile/mongo-keyFile  --port 27019
+      ports:
+        - 27019:27019
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      volumes:
+        - "./mongo3_data:/data/db"
+        - "./mongo3_config:/data/configdb"
+        - ./mongokey:/etc/mongo-keyfile
+

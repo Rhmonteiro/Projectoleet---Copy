@@ -4,7 +4,7 @@
     <side-bar
       :background-color="sidebarBackground"
       short-title="PL"
-      title="Projecto LEET"
+      title="Projecto RM"
     >
       <template slot-scope="props" slot="links">
         <sidebar-item

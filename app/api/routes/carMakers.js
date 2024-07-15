@@ -54,7 +54,7 @@ router.get("/carmakers", checkAuth, async (req, res) => {
 
         
         //get Vehicles
-        var carmakers = await CarMaker.find({});
+        var carmakers = await CarMaker.find({}).select("name");
         carmakers = JSON.parse(JSON.stringify(carmakers));
 
     
@@ -119,7 +119,7 @@ router.post("/carmakers", checkAuth, async (req, res) => {
 
 
             newCarMaker.userId = userId;
-            console.log(newCarPart);
+            console.log(newCarMaker);
             newCarMaker.createdTime = Date.now();
 
             const carMaker = await CarMaker.create(newCarMaker);

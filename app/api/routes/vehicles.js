@@ -33,7 +33,22 @@ import Vehicle from "../models/vehicle.js";
 ██║  ██║██║     ██║
 ╚═╝  ╚═╝╚═╝     ╚═╝
 */
-
+//validate query keys
+function validateQueryKeys(reqQuery) {
+    const schemaKeys = Object.keys(Vehicle.schema.paths);
+    const queryKeys = Object.keys(reqQuery);
+  
+    // Filter query keys that are not in the schema
+    const validKeys = queryKeys.filter(key => schemaKeys.includes(key) || key === 'vehicleId'); // 'vehicleId' is a special case
+  
+    // Optionally, handle special cases or transformations here
+    // For example, converting 'vehicleId' to an ObjectId, if necessary
+    if (validKeys.includes('vehicleId')) {
+        reqQuery.vehicleId = require('mongoose').Types.ObjectId(reqQuery.vehicleId);
+    }
+  
+    return validKeys;
+  }
 
 // CREDENTIALS
 
@@ -50,17 +65,60 @@ router.get("/vehicle", checkAuth, async (req, res) => {
     try {
 
         const userId = req.userData._id;
-        
-
+        const query = {
+            deleted: 0
+        };
+        const validKeys = validateQueryKeys(req.query);  // Validate query keys
+        console.log(validKeys);
+        for (const key of validKeys) {
+            if (req.query[key] != 'null') {
+                if (key === 'vehicleId') {
+                    query._id = req.query[key];
+                }else{
+                    
+                    query[key] = req.query[key];   // Add valid keys to the query
+                }
+            }
+        }
+console.log(query);
         
         //get Vehicles
-        var vehicles = await Vehicle.find({});
+        var vehicles = await Vehicle.find(query);
         vehicles = JSON.parse(JSON.stringify(vehicles));
 
     
        const toSend = {
         status: "success",
         data: vehicles
+    };
+    return res.status(200).json(toSend);
+   } catch (error) {
+        console.log("error getting vehicles");
+
+        const toSend = {
+            status: "error",
+            error: error
+        }
+        return res.status(500).json(toSend);
+   }
+    
+});
+router.get("/vehicleMakers", checkAuth, async (req, res) => {
+   
+    try {
+
+        const userId = req.userData._id;
+        
+
+        
+        //get Vehicles
+        var vehiclesMakers = await Vehicle.find().distinct('maker');
+        vehiclesMakers = JSON.parse(JSON.stringify(vehiclesMakers));
+
+    
+       const toSend = {
+        status: "success",
+        data: vehiclesMakers
     };
     return res.status(200).json(toSend);
    } catch (error) {
@@ -125,7 +183,9 @@ router.delete("/vehicle",checkAuth, async(req, res) => {
         const plate = req.query.plate;
 
         
-        const result = await Vehicle.deleteOne({ plate: plate });
+        // const result = await Vehicle.deleteOne({ plate: plate });
+
+        const result = await Vehicle.updateOne({ plate: plate }, { deleted: 1 });
 
         const toSend = {
             status: "success",

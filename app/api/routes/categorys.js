@@ -9,6 +9,7 @@ const axios = require('axios');
 ////////////////////////////////////////////////////
 
 import Category from '../models/category.js';
+import CarPart from '../models/carPart.js';
 
 
 //CREDS
@@ -18,6 +19,46 @@ const auth={
         password: "emqxsecret"
     }
 };
+
+//GET categories
+
+router.get("/categorycount", checkAuth, async(req,res)=>{
+ 
+    try {
+
+        const userId = req.userData._id;
+        const filterBy={type: req.query.type};
+        
+        
+        //get Vehicles
+        let categoryCount= await CarPart.countDocuments(filterBy, function (err, count) {
+            if (err){
+                console.log(err)
+            }else{
+                // console.log("Count :", count)
+                // console.log("type: ", filterBy)
+                return count;
+            }
+        });
+        categoryCount = JSON.parse(JSON.stringify(categoryCount));
+
+    
+       const toSend = {
+        status: "success",
+        data: categoryCount
+    };
+    return res.status(200).json(toSend);
+   } catch (error) {
+        console.log("error getting car part");
+
+        const toSend = {
+            status: "error",
+            error: error
+        }
+        return res.status(500).json(toSend);
+   }
+});
+
 
 //GET categories
 
@@ -31,7 +72,7 @@ router.get("/category", checkAuth, async(req,res)=>{
         categories = JSON.parse(JSON.stringify(categories));
 
         const toSend={
-            status: "succes",
+            status: "success",
             data: categories
         };
         return res.status(200).json(toSend);

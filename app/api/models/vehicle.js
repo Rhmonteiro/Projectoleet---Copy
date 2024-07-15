@@ -32,11 +32,13 @@ const vehicleSchema = new Schema({
     abate: { type: Boolean, required: [true], default: true },
     state: { type: String },
     createdTime:{type: Number},
+    deleted: { type: Boolean, default: false, required: [true]},
+    
 
 });
 
 //validator
-vehicleSchema.plugin(uniqueValidator, { message: 'Erro o veiculo ja existe na base de dados.' });
+vehicleSchema.plugin(uniqueValidator, { message: 'Erro o veículo ja existe na base de dados.' });
 
 // Schema to model
 const Vehicle = mongoose.model('Vehicle', vehicleSchema);

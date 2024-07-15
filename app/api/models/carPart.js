@@ -25,7 +25,7 @@ const carPartSchema = new Schema({
 
     userId: { type: String, required: [true] },
     rfid:{type:String, unique:[true]},
-    vehicleId: { type: String },
+    vehicleId: {type: Schema.Types.ObjectId, ref: 'Vehicle'},
     type: { type: String, required: [true]},
     name: { type: String, required: [true] },
     description: { type: String },
@@ -34,8 +34,8 @@ const carPartSchema = new Schema({
     createdTime: { type: Number },
     carMaker:{type:String},
     carModel:{type:String},
-    vehicleID:{type:String},
-    whlocation:{type:String}
+    whlocation:{type:String},
+    deleted: { type: Boolean, default: false, required: [true]},
     
 });
 

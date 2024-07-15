@@ -5,22 +5,22 @@
         <div class="row">
 <card>
             <div slot="header">
-                <h4 class="card-title">Add Device</h4>
+                <h4 class="card-title">Adicionar Dispositivo</h4>
             </div>
 
             <div class="row">
                  <div class="col-4">
                      <base-input 
-                     label="Device name" 
+                     label="nome do dispositivo" 
                      type="text" 
-                     placeholder="Ex: Home, office"
+                     placeholder="Ex: Aramazem 1"
                      v-model="newDevice.name"
                      ></base-input>
                  </div>
                  
                  <div class="col-4">
                      <base-input 
-                     label="Device id" 
+                     label="id do dispositivo" 
                      type="text" 
                      placeholder="Ex: 111111, 222222"
                      v-model="newDevice.dId"
@@ -49,7 +49,7 @@
          <div class="row">
          <card>
             <div slot="header">
-                <h4 class="card-title">Devices</h4>
+                <h4 class="card-title">Dispositivos</h4>
             </div>
         
         <el-table :data="$store.state.devices"
@@ -63,9 +63,9 @@
                 </div>
             </el-table-column>
 
-            <el-table-column prop="name" label="Name"></el-table-column>
+            <el-table-column prop="name" label="Nome"></el-table-column>
 
-            <el-table-column prop="dId" label="Device ID"></el-table-column>
+            <el-table-column prop="dId" label="ID do dispositivo"></el-table-column>
 
             <el-table-column prop="password" label="Password"></el-table-column>
 
@@ -73,7 +73,7 @@
 
             <el-table-column prop="rssi" label="rssi (dBm)"></el-table-column>
 
-            <el-table-column label="Actions">
+            <el-table-column label="Ações">
 
                 <div slot-scope="{row, $index}">
 
@@ -218,7 +218,7 @@ export default {
               message:
                 "Failed to create new device - resource offline or not connected"
             });
-            console.log(e);
+            // console.log(e);
             return;
           } else {
             this.showNotify("danger", "Error");
@@ -257,7 +257,7 @@ export default {
           return;
         })
         .catch(e => {
-          console.log(e);
+          // console.log(e);
           this.$notify({
             type: "danger",
             icon: "tim-icons icon-alert-circle-exc",
@@ -292,7 +292,7 @@ export default {
           return;
         })
         .catch(e => {
-          console.log(e);
+          // console.log(e);
           this.$notify({
             type: "danger",
             icon: "tim-icons icon-alert-circle-exc",

@@ -4,7 +4,7 @@
     <side-bar
       :background-color="sidebarBackground"
       short-title="PL"
-      title="Projecto LEET"
+      title="Projecto RM"
     >
       <template slot-scope="props" slot="links">
         <sidebar-item
@@ -17,15 +17,7 @@
         </sidebar-item>
         <sidebar-item
           :link="{
-            name: 'Dispositivos',
-            icon: 'tim-icons icon-wifi',
-            path: '/Devices'
-          }"
-        >
-        </sidebar-item>
-        <sidebar-item
-          :link="{
-            name: 'Veiculos',
+            name: 'Veículos',
             icon: 'tim-icons icon-bus-front-12',
             path: '/Vehicles'
           }"
@@ -39,14 +31,30 @@
           }"
         >
         </sidebar-item>
-         <sidebar-item
+        <sidebar-item
+          :link="{
+            name: 'Inventário',
+            icon: 'tim-icons icon-single-copy-04',
+            path: '/inventory'
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
+            name: 'Dispositivos',
+            icon: 'tim-icons icon-wifi',
+            path: '/Devices'
+          }"
+        >
+        </sidebar-item>
+         <!-- <sidebar-item
           :link="{
             name: 'Actualizar BD',
             icon: 'tim-icons icon-app',
             path: '/Updatedb'
           }"
         >
-        </sidebar-item>
+        </sidebar-item> -->
       
       </template>
     </side-bar>
@@ -126,6 +134,7 @@ function hasElement(className) {
           },
           nuxtTopic:"rfid",
           currentSubTopicSData: "",
+          currentSubTopicNotif: "",
           currentPubTopicRFID:"",
     };
     },
@@ -192,7 +201,9 @@ function hasElement(className) {
 
         //ex topic. "userId/did/variableId/sdata"
         this.currentSubTopicSData = this.$store.state.auth.userData._id +"/+/+/sdata";
-        const subscribetopicsinfo = this.$store.state.auth.userData._id +"/+/+/sinfo";
+        const subscribetopicsinfo = "+/"+"+"+"/+/sinfo";
+        this.currentSubTopicNotif = this.$store.state.auth.userData._id +"/+/+/notif";
+        const pubTopic= this.$store.state.auth.userData._id +"/"+ this.$store.state.selectedDevice.dId +"/1/actdata";
 
         const connectUrl = "ws://" + this.options.host + ":"+ this.options.port+ this.options.endpoint;
 
@@ -205,6 +216,8 @@ function hasElement(className) {
         this.client.on('connect', ()=>{
           console.log("connection success");
 
+
+          //subscribe sdata
           this.client.subscribe(this.currentSubTopicSData, {qos: 0},(err)=>{
            
            if(err){
@@ -229,9 +242,23 @@ function hasElement(className) {
           
           
           });
+
+          //subscribe notif
+          this.client.subscribe(this.currentSubTopicNotif, {qos: 0},(err)=>{
+           
+           if(err){
+              console.log("error in notif subscribe topic");
+            }
+
+            console.log("subscribe notif topic success");
+            console.log(subscribetopicsinfo); 
+          
+          
+          });
+         
         });
 
-         
+        // this.client.publish(pubTopic, JSON.stringify({"a":"a"}));
           
 
         
@@ -282,6 +309,7 @@ function hasElement(className) {
 
       updatePubSub(){
 
+        //unsubscribe sdata
         this.client.unsubscribe(this.currentSubTopicSData,(err)=>{
            
            if(err){
@@ -293,8 +321,26 @@ function hasElement(className) {
           
           
           });
+
+          //unsubscribe notif
+          this.client.unsubscribe(this.currentSubTopicNotif,(err)=>{
+           
+           if(err){
+              console.log("error in notif unsubscribe topic");
+            }
+
+            console.log("unsubscribe notif topic success");
+            console.log(this.currentSubTopicNotif); 
+          
+          
+          });
+
         this.currentSubTopicSData= this.$store.state.auth.userData._id +"/" + this.$store.state.selectedDevice.dId + "/+/sdata";
-        this.client.subscribe(this.currentSubTopicSData, {qos: 0},(err)=>{
+        this.currentSubTopicNotif= this.$store.state.auth.userData._id +"/" + this.$store.state.selectedDevice.dId + "/+/notif";
+        
+          
+          //subscribe sdata
+          this.client.subscribe(this.currentSubTopicSData, {qos: 0},(err)=>{
            
            if(err){
               console.log("error in sdata subscribe topic");
@@ -305,6 +351,21 @@ function hasElement(className) {
           
           
           });
+
+
+        //subscribe notif
+        this.client.subscribe(this.currentSubTopicNotif, {qos: 0},(err)=>{
+           
+           if(err){
+              console.log("error in notif subscribe topic");
+            }
+
+            console.log("subscribe notif topic success");
+            console.log(this.currentSubTopicNotif); 
+          
+          
+          });
+          this.client.publish(this.$store.state.auth.userData._id+"/" + this.$store.state.selectedDevice.dId +"/1/actdata", JSON.stringify({"a":"a"}));
 
       },
 

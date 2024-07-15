@@ -5,7 +5,9 @@
         <div class="row">
 <card>
             <div slot="header">
-                <h4 class="card-title">Adicionar Peça</h4>
+                <h4 class="card-title">Adicionar Peça ao veículo de matricula:</h4>
+                
+                <h2 class="text-success" > {{this.$store.state.selectedVehicle.plate}}</h2>
             </div>
 
             <div class="row">
@@ -17,12 +19,12 @@
                  </div>
                  <div class="col-md-4">
                    <p>Marca:</p>
-                    <AutoCompletame v-model="newCarPart.carMaker" :state1="newCarPart.carMaker" :links="this.carMakers" @update:state1="handleState1Update" @update:selectedValue="getMakerModels" valueKey="name" >
+                    <AutoCompletame v-model="newCarPart.carMaker" :disabled="true" :state1="newCarPart.carMaker" :links="this.carMakers" @update:state1="handleState1Update" @update:selectedValue="getMakerModels" valueKey="name" >
                     </AutoCompletame>
                  </div>
                 <div class="col-md-4">
                    <p>Modelo:</p>
-                   <AutoCompletame v-model="newCarPart.carModel" :state1="newCarPart.carModel" :links="this.$store.state.makerModels" @update:state1="handleState2Update">
+                   <AutoCompletame v-model="newCarPart.carModel" :disabled="true" :state1="newCarPart.carModel" :links="this.$store.state.makerModels" @update:state1="handleState2Update">
                     </AutoCompletame>
                    
 
@@ -154,23 +156,13 @@
                         </AutoCompletame>
   
     </div> 
-                      <div class="col-sm-2">
-                        <p>Marca:</p>
-                        <AutoCompletame v-model="makerTextFilter" :state1="makerTextFilter" :links="this.filteredCarMakers"  @update:selectedValue="handleMakerFilter"  >
-                        </AutoCompletame>
-                        </div>
 
-                        <div class="col-sm-2">
-                        <p>Modelo:</p>
-                        <AutoCompletame v-model="modelTextFilter" :state1="modelTextFilter" :links="this.tableMakerModels" @update:state1="filterTableModels"  @update:selectedValue="handleModelFilter"  ></AutoCompletame>
-                       
-                        </div>
 
                           <div class="row-sm-2 align-self-end position-relative">
   
   
                             <base-button
-                                          @click="resetFilteredCarPart();setFiltros('type','null');setFiltros('carMaker','null');setFiltros('carModel','null');catTextFilter='';makerTextFilter='';defaultPagination=1; filterTableModels();modelTextFilter='';"
+                                          @click="resetFilteredCarPart();setFiltros('vehicleId',filterby.vehicleId);setFiltros('type','null');setFiltros('carMaker','null');setFiltros('carModel','null');catTextFilter='';makerTextFilter='';defaultPagination=1; filterTableModels();modelTextFilter='';"
                                           type="danger"
                                           class="col-sm-2"
                                           size="sm"
@@ -178,18 +170,7 @@
                                           </base-button
                                         >
                         </div>
- <!--  <base-dropdown style="display:inline-block" min-width="32"  title-classes="btn btn-secondary"
-                 title="Categoria" menu-classes="dropdown-black">
-      <a v-for="item in categorias " :key="item.name" class="dropdown-item" v-on:click="resetFilteredCarPart();setFiltros('type',item.name);defaultPagination=1"> {{item.name}}</a>
-  </base-dropdown>
-  <base-dropdown style="display:inline-block"   title-classes="btn btn-secondary"
-                 title="Marca" menu-classes="dropdown-black">
-      <a v-for="item, index in this.filteredCarMakers" :key="item" class="dropdown-item" v-on:click="setFiltros('carMaker',item);filterTableModels();defaultPagination=1"> {{item}}</a>
-  </base-dropdown>
-  <base-dropdown style="display:inline-block"  title-classes="btn btn-secondary"
-                 title="Modelo" menu-classes="dropdown-black">
-      <a v-for="item,index in this.tableMakerModels" :key="item" class="dropdown-item" v-on:click="setFiltros('carModel',item);defaultPagination=1">{{item}}</a>
-  </base-dropdown> -->
+
 
 </div>  
 
@@ -198,7 +179,8 @@
 
 
             <div slot="header">
-                <h4 class="card-title">Peças</h4>
+                <h4 class="card-title">Peças do veículo de matricula:</h4>
+                <h2 class="text-success" > {{this.$store.state.selectedVehicle.plate}}</h2>
             </div>
         
         <el-table :data="pagedTableData" >
@@ -300,7 +282,8 @@ export default {
             filterby:{
               category:"null",
               brand:"null",
-              model:"null"
+              model:"null",
+              vehicleId:""
             },
             makerModels:[],
             tableMakerModels:[],
@@ -328,11 +311,12 @@ export default {
     },
     computed:{
       pagedTableData(){
+      
         
           let _sortBy=this.sortBy;
           if (this.carParts[0]) {
           let checkType = typeof this.carParts[0][_sortBy];
-          // console.log(checkType);
+          // // console.log(checkType);
             
 
              switch (checkType) {
@@ -345,8 +329,8 @@ export default {
         }).slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
 
             case'string':
-// console.log("sort by: ");
-          // console.log(_sortBy);
+// // console.log("sort by: ");
+          // // console.log(_sortBy);
 
            return JSON.parse(JSON.stringify(this.carParts)).sort(function(a,b) {
              const sortByNormalizedA = a[_sortBy].toLowerCase();
@@ -368,32 +352,6 @@ export default {
         
 
         
-        //  }
-        // if(checkType === "number"){
-        // return JSON.parse(JSON.stringify(this.carParts)).sort(function(a,b) {
-        //   return a[_sortBy] - b[_sortBy];
-        // }).slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
-
-        // };
-        //  if(_sortBy != ''){
-        //   // console.log("sort by: ");
-        //   // console.log(_sortBy);
-
-        //    return JSON.parse(JSON.stringify(this.carParts)).sort(function(a,b) {
-        //      const sortByNormalizedA = a[_sortBy].toLowerCase();
-        //      const sortByNormalizedB = b[_sortBy].toLowerCase();
-        //      if (sortByNormalizedA < sortByNormalizedB) {
-        //        return -1;
-               
-        //      }
-        //      if (sortByNormalizedA > sortByNormalizedB) {
-        //        return 1;
-        //      }
-        //      return 0;
-        //    }).slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
-        //  }else{
-        //  //return this.carParts.slice(this.pageSize * this.defaultPagination - this.pageSize, this.pageSize * this.defaultPagination);
-        //  }
       }
 
 
@@ -404,26 +362,48 @@ export default {
     },
     async fetch() {
         // this.$store.dispatch('getCarParts',this.filterby);
+        this.filterby.vehicleId=this.$route.query.vehicle;
+      // console.log("fetch: "+ this.filterby.vehicleId);
        await this.$store.dispatch("getCarParts",this.filterby);
-        await this.$store.commit('setFilteredCarParts',this.$store.state.carParts);
+       // await this.$store.commit('setFilteredCarParts',this.$store.state.carParts);
         await this.$store.dispatch('getCategories');
         await this.$nuxt.$on(this.topic, this.processRecievedData);
-        await this.$store.dispatch('getCarMakers');
+       // await this.$store.dispatch('getCarMakers');
          //remove duplicados
-         // console.log("fetch");
-         this.carParts=JSON.parse(JSON.stringify(this.$store.state.filteredCarParts));
-         this.carMakers=JSON.parse(JSON.stringify(this.$store.state.carMakers)).sort(
-              (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
+        // this.carParts=JSON.parse(JSON.stringify(this.$store.state.filteredCarParts));
+        //  this.carMakers=JSON.parse(JSON.stringify(this.$store.state.carMakers)).sort(
+        //       (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
 
               this.categorias=JSON.parse(JSON.stringify(this.$store.state.categories)).sort(
               (a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
 
-        this.filterMakers();
+              if(this.$route.query.vehicle!=undefined){
+               await this.$store.dispatch('getSelectedVehicleInfo',this.$route.query.vehicle);
+               this.newCarPart.userId=this.$store.state.auth.userData._id;
+                this.newCarPart.carMaker=this.$store.state.selectedVehicle.maker;
+                this.newCarPart.carModel=this.$store.state.selectedVehicle.carModel;
+                this.newCarPart.vehicleId=this.$store.state.selectedVehicle._id;
+                await this.setFiltros('vehicleId',this.filterby.vehicleId);
+                await this.filterTableModels();
+                await this.filterMakers();
+              }
+              
     },
     mounted(){
+    
 //teste
 // console.log("mounted");
-
+// console.log("query: "+JSON.stringify(this.$route.query.vehicle.abate) );
+//this.filterby.vehicleId=this.$store.state.selectedVehicle._id;
+Object.keys(this.$store.state.selectedVehicle).forEach(key => {
+  // // console.log("key: "+key);
+  // // console.log("value: "+this.$route.query.vehicle[key]);
+});
+Object.keys(this.newCarPart).forEach(key => {
+  this.newCarPart[key]=this.$store.state.selectedVehicle[key];
+  // // console.log("key: "+key);
+  // // console.log("value: "+this.newCarPart[key]);
+});
 this.carMakers=this.$store.state.carMakers;
 
      
@@ -432,7 +412,7 @@ this.carMakers=this.$store.state.carMakers;
     methods: {
       handleStateCatFilter(newValue4) {
         this.stateCatFilter = newValue4;
-        // console.log('stateCatFilter updated to:', this.stateCatFilter);
+        // // console.log('stateCatFilter updated to:', this.stateCatFilter);
         if(this.stateCatFilter === ""){
           this.resetFilteredCarPart();
           this.setFiltros('type','null');
@@ -441,25 +421,22 @@ this.carMakers=this.$store.state.carMakers;
         }
     },
     handleCatFilter(item){
-      // console.log("handleCatFilter:" +item );
+      // // console.log("handleCatFilter");
       this.resetFilteredCarPart();
+      this.setFiltros('vehicleId',this.filterby.vehicleId)
       this.setFiltros('type',item);
       this.filterTableModels();
     },
 handleModelFilter(item){
-  // console.log("handleModelFilter");
+  // // console.log("handleModelFilter");
   this.resetFilteredCarPart();
   this.setFiltros('carModel',item);
-  if (this.catTextFilter!=="") {
-    
-    this.setFiltros('type',this.catTextFilter);
-  }
   this.filterTableModels();
 },
 
     handleStateMakerFilter(newValue5) {
       this.stateMakerFilter = newValue5;
-      // console.log('stateMakerFilter updated to:', this.stateMakerFilter);
+      // // console.log('stateMakerFilter updated to:', this.stateMakerFilter);
       if(this.stateMakerFilter === ""){
         this.resetFilteredCarPart();
         this.setFiltros('carMaker','null');
@@ -468,7 +445,7 @@ handleModelFilter(item){
     },
 handleStateModelFilter(newValue6) {
   this.stateModelFilter = newValue6;
-  // console.log('stateModelFilter updated to:', this.stateModelFilter);
+  // // console.log('stateModelFilter updated to:', this.stateModelFilter);
   if(this.stateModelFilter === ""){
     this.resetFilteredCarPart();
     this.setFiltros('carModel','null');
@@ -477,6 +454,7 @@ handleStateModelFilter(newValue6) {
 },
     
     handleMakerFilter(item){
+      // // console.log("handleMakerFilter " + JSON.stringify(item.value));
       this.setFiltros('carMaker',item);
       this.filterTableModels();
     },
@@ -486,7 +464,7 @@ generateRFID() {
 },
       
       handleState1Update(newValue) {
-      // console.log('state1 updated to:', newValue);
+      //  console.log('state1 updated to:', newValue);
         this.state1 = newValue;
         this.newCarPart.carMaker = newValue;
     },handleState2Update(newValue2) {
@@ -500,21 +478,21 @@ generateRFID() {
         var carMakers = this.carMakers;
         var results = queryString ? carMakers.filter(this.createFilter(queryString)) : carMakers;
         // call callback function to return suggestions
-        // console.log(results);
+        // // console.log(results);
         cb(results);
       },
       querySearchModels(queryString, cb) {
         var carModels = this.makerModels;
         var results = queryString ? carModels.filter(this.createFilter(queryString)) : carModels;
         // call callback function to return suggestions
-        // console.log("resultadosmodels");
-        // console.log(results);
+        // // console.log("resultadosmodels");
+        // // console.log(results);
         cb(results);
       },
       createFilter(queryString) {
         return (carMaker) => {
-          // console.log("dentro filtros");
-          // console.log(carMaker);
+          // // console.log("dentro filtros");
+          // // console.log(carMaker);
             return carMaker.name.toLowerCase().indexOf(queryString.toLowerCase()) !==-1;
         };
       },
@@ -522,7 +500,7 @@ generateRFID() {
       handleSelect(item, vmodel) {
         //check vmodel if vmodel is state1 then set state1 to item.name if vmodel is state2 then set state2 to item.name
         this[vmodel] = item.name;
-        // console.log(item.name);
+        // // console.log(item.name);
       },
       getMakerModels(_carMaker){
         
@@ -541,6 +519,8 @@ generateRFID() {
       setFiltros(type,name){
         this.$store.state.filtros=this.filtros;             
         this.filtros[type]=name;
+        // console.log("filtros SETFILTROS: "+JSON.stringify(this.filtros));
+        // console.log("filtros NAME: "+name);
         this.$store.dispatch('filterCarParts', this.filtros);
         this.refreshCarPart();
         //remove duplicados
@@ -571,8 +551,7 @@ generateRFID() {
       //process recieved nuxt even data
       processRecievedData(data){
         this.newCarPart.rfid=data.rfid;
-        // console.log("data: ");
-        // console.log(data);
+        
       },
 
       //get device MQTT RFID
@@ -582,7 +561,13 @@ generateRFID() {
 
       //update rule status
       
-      
+      async refreshVehicleCarParts(){
+      await this.$store.dispatch("getCarParts",this.filterby);
+      await this.$store.commit('setFilteredCarParts',this.$store.state.carParts);
+      this.setFiltros('vehicleId',this.filterby.vehicleId);
+      this.carParts=JSON.parse(JSON.stringify(this.$store.state.filteredCarParts));
+      this.filterTableModels();
+    },
 
        //new vehicle
     createNewCarPart() {
@@ -634,6 +619,8 @@ generateRFID() {
             this.newCarPart.price = "";
             this.newCarPart.state = "";
             this.newCarPart.rfid="";
+            this.newCarPart.whlocation="";
+            this.refreshVehicleCarParts();
             this.$notify({
               type: "success",
               icon: "tim-icons icon-check-2",
@@ -747,6 +734,7 @@ generateRFID() {
             });
           }
           $nuxt.$emit("time-to-get-devices");
+          this.refreshVehicleCarParts();
           return;
         })
         .catch(e => {

@@ -14,7 +14,7 @@ const app = express();
 
 
 //express config
-app.use(morgan("tiny"));
+app.use(morgan("short"));
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
