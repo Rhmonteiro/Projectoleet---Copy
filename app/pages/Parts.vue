@@ -651,7 +651,7 @@ generateRFID() {
               type: "warning",
               icon: "tim-icons icon-alert-circle-exc",
               message:
-                "O veiculo ja se encontra no sistema."
+                "O veículo ja se encontra no sistema."
             });
             return;
           }else if (

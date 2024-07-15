@@ -9,7 +9,7 @@
             rel="noopener"
             class="nav-link"
           >
-            ProjectoRDR
+            ProjectoRM
           </a>
         </li>
         <li class="nav-item">
@@ -35,7 +35,7 @@
         </li> -->
       </ul>
       <div class="copyright">
-        <!-- &copy; {{ year }}--> 2021<!--,  made with <i class="tim-icons icon-heart-2"></i> by 
+        &copy; {{ year }} <!--,  made with <i class="tim-icons icon-heart-2"></i> by 
         
         <a
           href="https://github.com/Rhmonteiro"

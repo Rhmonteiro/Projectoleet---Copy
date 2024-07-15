@@ -5,7 +5,7 @@
         <div class="row">
 <card>
             <div slot="header">
-                <h4 class="card-title">Adicionar Veiculo</h4>
+                <h4 class="card-title">Adicionar Veículo</h4>
             </div>
 
             <div class="row">
@@ -50,7 +50,7 @@
                      <base-input 
                      label="Ano" 
                      type="text" 
-                     placeholder="Ex: yyyy/mm/dd"
+                     placeholder="Ex: yyyy"
                      v-model="newVehicle.year"
                      ></base-input>
 
@@ -76,7 +76,7 @@
          <div class="row">
          <card>
             <div slot="header">
-                <h4 class="card-title">Veiculos</h4>
+                <h4 class="card-title">Veículos</h4>
             </div>
         
         <el-table :data="$store.state.vehicles">
@@ -114,13 +114,13 @@
  
                 </el-tooltip>
                 <el-tooltip
-                content="Edit"
+                content="Adicionar peças"
                 effect="light"
                 :open-delay="300"
                 placement="top"
                 >
-                    <base-button type="info" icon size="sm" class="btn-link" @click="goToAddPartPage($index)">
-                        <i class="tim-icons icon-simple-info"></i>
+                    <base-button type="" icon size="sm" class="btn-link" @click="goToAddPartPage($index)">
+                        <i class="tim-icons icon-app"></i>
                     </base-button>
                 </el-tooltip>
                 </div>
@@ -241,7 +241,7 @@ export default {
             this.$notify({
               type: "success",
               icon: "tim-icons icon-check-2",
-              message: "Successo!  o veiculo foi adicionado."
+              message: "Successo!  o veículo foi adicionado."
             });
             return;
           }
@@ -255,7 +255,7 @@ export default {
               type: "warning",
               icon: "tim-icons icon-alert-circle-exc",
               message:
-                "O veiculo ja se encontra no sistema."
+                "O veículo ja se encontra no sistema."
             });
             return;
           }else if (

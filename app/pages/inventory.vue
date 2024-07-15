@@ -7,7 +7,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <h4>seleccione a localizacao:</h4>  
+                    <h4>selecione a localização:</h4>  
                     <AutoCompletame v-model="locationFilter" :state1="locationFilter" :links="$store.state.locations" @update:selectedValue="handleLocationFilter"></AutoCompletame>
                     <base-button 
                     type="primary"

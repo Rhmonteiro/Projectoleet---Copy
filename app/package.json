@@ -1,8 +1,8 @@
 {
-  "name": "iot_gl_app",
+  "name": "Projeto_RM",
   "version": "1.0.0",
-  "description": "IOT_GL_APP",
-  "author": "IoTicos.org",
+  "description": "ProjetoRM",
+  "author": "RM",
   "scripts": {
     "dev": "nuxt",
     "devn": "nodemon api/index.js --exec babel-node",

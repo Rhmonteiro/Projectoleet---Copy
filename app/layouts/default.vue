@@ -4,7 +4,7 @@
     <side-bar
       :background-color="sidebarBackground"
       short-title="PL"
-      title="Projecto RDR"
+      title="Projecto RM"
     >
       <template slot-scope="props" slot="links">
         <sidebar-item
@@ -17,7 +17,7 @@
         </sidebar-item>
         <sidebar-item
           :link="{
-            name: 'Veiculos',
+            name: 'Veículos',
             icon: 'tim-icons icon-bus-front-12',
             path: '/Vehicles'
           }"
@@ -47,14 +47,14 @@
           }"
         >
         </sidebar-item>
-         <sidebar-item
+         <!-- <sidebar-item
           :link="{
             name: 'Actualizar BD',
             icon: 'tim-icons icon-app',
             path: '/Updatedb'
           }"
         >
-        </sidebar-item>
+        </sidebar-item> -->
       
       </template>
     </side-bar>

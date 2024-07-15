@@ -26,7 +26,7 @@
       links:
           - mongo
       extra_hosts: 
-        - "localhost:192.168.12.125"
+        - "localhost:192.168.1.74"
       # volumes:
       #   - vol-emqx-data:/opt/emqx/data
       #   - vol-emqx-etc:/opt/emqx/etc
@@ -35,7 +35,7 @@
       environment: 
         #listener.tcp.external.max_connections
 
-        EMQX_NAME: ProjectoLeet2021RM-gl
+        EMQX_NAME: ProjectoRM2024
         EMQX_HOST: 127.0.0.1
 
         #default dash pass

@@ -38,7 +38,7 @@ const vehicleSchema = new Schema({
 });
 
 //validator
-vehicleSchema.plugin(uniqueValidator, { message: 'Erro o veiculo ja existe na base de dados.' });
+vehicleSchema.plugin(uniqueValidator, { message: 'Erro o veículo ja existe na base de dados.' });
 
 // Schema to model
 const Vehicle = mongoose.model('Vehicle', vehicleSchema);

@@ -5,7 +5,7 @@
     <div class="row">
       <div class="col-md-4">
         <card class="comBordasL comBordasR comBordasT comBordasB">
-          <h3>Number of Vehicles in Stock</h3>
+          <h3>Número de veículos em Stock</h3>
           <h1>{{ numberOfVehicles }}</h1>
         </card>
       </div>
@@ -13,11 +13,11 @@
         <card class="comBordasL comBordasR comBordasT comBordasB">
           <div class="row">
           <div class="col-md-4 comBordasR ">
-          <h3>Number of items in Stock</h3>
+          <h3>Número de peças em Stock</h3>
           <h1 class="combBordasB">{{ numberOfItems }}</h1>
           </div>
           <div class="col-md-8 comBordasL">
-            <h3 class="comBordasT">Value of items in stock</h3>
+            <h3 class="comBordasT">Valor das peças em stock</h3>
             <h1>{{ValueOfItems}}€</h1>
           </div>
         </div>

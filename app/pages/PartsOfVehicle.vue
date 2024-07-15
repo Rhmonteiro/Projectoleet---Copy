@@ -5,7 +5,7 @@
         <div class="row">
 <card>
             <div slot="header">
-                <h4 class="card-title">Adicionar Peça ao veiculo de matricula:</h4>
+                <h4 class="card-title">Adicionar Peça ao veículo de matricula:</h4>
                 
                 <h2 class="text-success" > {{this.$store.state.selectedVehicle.plate}}</h2>
             </div>
@@ -179,7 +179,7 @@
 
 
             <div slot="header">
-                <h4 class="card-title">Peças do veiculo de matricula:</h4>
+                <h4 class="card-title">Peças do veículo de matricula:</h4>
                 <h2 class="text-success" > {{this.$store.state.selectedVehicle.plate}}</h2>
             </div>
         
@@ -638,7 +638,7 @@ generateRFID() {
               type: "warning",
               icon: "tim-icons icon-alert-circle-exc",
               message:
-                "O veiculo ja se encontra no sistema."
+                "O veículo ja se encontra no sistema."
             });
             return;
           }else if (
